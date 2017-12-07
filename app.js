@@ -7,14 +7,17 @@ var connection = mysql.createConnection({
     password: '550database2017',
     database: 'Movie_RDS'
 });
+// var http = require('http');
 
 console.log("connected");
 
 connection.connect();
+// var server = http.createServer(app);
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
+// homepage
 app.get("/", function(req, res) {
 	res.render("homepage");
 });
@@ -23,6 +26,7 @@ app.get("/movie", function(req, res) {
 	res.render("movie");
 });
 
+// movie details
 app.get('/movies/:id', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
@@ -43,3 +47,7 @@ app.get('/login', function (req, res) {
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
 });
+
+// server.listen(app.get('port'), function(){
+//     console.log('Express server listening on port ' + app.get('port'));
+// });
