@@ -13,6 +13,7 @@ console.log("connected");
 connection.connect();
 
 app.set("view engine", "ejs");
+app.use(express.static("public"));
 
 app.get("/", function(req, res) {
 	res.render("homepage");
@@ -33,6 +34,10 @@ app.get('/movies/:id', function(req, res) {
         var movie = movies[0]["title"];
         res.render('movieDetails', {movie : movie});
     })
+});
+
+app.get('/login', function (req, res) {
+    res.render("login");
 });
 
 app.listen(3000, function() {
