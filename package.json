@@ -23,7 +23,11 @@
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+<<<<<<< HEAD
     "jquery": "^3.2.1",
+=======
+    "mysql": "^2.15.0",
+>>>>>>> c90dfecdcf2a07c1ca54acb3578fb8b39b232747
     "request": "^2.83.0"
   }
 }
