@@ -1,6 +1,18 @@
-.ui.inverted.segment , .ui.primary.inverted.segment {
-    background-image: url("https://semantic-ui.com/images/backgrounds/11.jpg");
+
+.ui.inverted.segment, .ui.primary.inverted.segment  {
+    background-image: url("https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif"); //https://semantic-ui.com/images/backgrounds/11.jpg
+    background-repeat: no-repeat;
+    background-size: contain;
+    /*background-position: center center;*/
 }
+/*https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif*/
+
+.ui.inverted.vertical.footer.segment {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 
 
 .hidden.menu {
