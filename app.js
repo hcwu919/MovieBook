@@ -24,6 +24,19 @@ app.get("/", function(req, res) {
 	res.render("homepage");
 });
 
+app.get('/search', function(req, res) {
+    connection.query('SELECT title from Movie where title like "%'+req.query.key+'%"',
+    function(err, rows, fields) {
+        if (err) throw err;
+        var data=[];
+        for(i=0;i<rows.length;i++)
+        {
+            data.push(rows[i].title);
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
 app.get("/movie", function(req, res) {
 	res.render("movie");
 });
@@ -67,7 +80,7 @@ app.get('/homepage/:id', function(req, res) {
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
-});
+})
 
 // server.listen(app.get('port'), function(){
 //     console.log('Express server listening on port ' + app.get('port'));
