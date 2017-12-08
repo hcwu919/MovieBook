@@ -43,17 +43,19 @@ app.get("/movie", function(req, res) {
 });
 
 // movie details
-app.get('/movie/:id', function(req, res) {
+app.get('/movieDetails', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
 
-    var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
-    connection.query(query, function (err, movies) {
-        if(err) throw err;
-        console.log(query);
-        var movie = movies[0]["title"];
-        res.render('movieDetails', {movie : movie});
-    })
+    res.render('movieDetails');
+
+    // var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
+    // connection.query(query, function (err, movies) {
+    //     if(err) throw err;
+    //     console.log(query);
+    //     var movie = movies[0]["title"];
+    //     res.render('movieDetails', {movie : movie});
+    // })
 });
 
 app.get('/login', function (req, res) {
@@ -69,13 +71,9 @@ app.get('/login', function (req, res) {
         res.render('homepage/:id', {movie : movies});
     })
 
-    res.render("homepage/:id");
+    res.render("homepage");
 });
 
-// homepage after login with recommendation
-app.get('/homepage/:id', function(req, res) {
-    res.render('homepage/:id')
-});
 
 
 
