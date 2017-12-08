@@ -27,7 +27,7 @@ app.get("/movie", function(req, res) {
 });
 
 // movie details
-app.get('/movies/:id', function(req, res) {
+app.get('/movie/:id', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
 
