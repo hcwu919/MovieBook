@@ -25,6 +25,26 @@ app.get("/", function(req, res) {
     res.render("homepage");
 });
 
+
+app.get('/search', function (req, res) {
+    // var content = req.body.searchContent;
+    // // content = content.split("").join("''");
+    // var type = req.body.searchType;
+    // console.log(type);
+    // console.log(content);
+    // var query;
+    // // if(type=="title") {
+    // query = "SELECT distinct title from Movie WHERE title LIKE '%" + content + "%' LIMIT 50";
+    // connection.query(query, function (err, movies) {
+    //
+    //     if (err) throw err;
+    //     console.log(JSON.stringify(movies));
+    //     // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+    //     res.render('result', {movies: movies});
+    // });
+    res.render('search');
+});
+
 app.post('/result', function(req, res) {
 
     var content = req.body.searchContent;
