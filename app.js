@@ -15,6 +15,7 @@ var connection = mysql.createConnection({
 connection.connect();
 // var server = http.createServer(app);
 
+app.set('views',__dirname + '/views');
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
