@@ -1,3 +1,10 @@
+
+.ui.inverted.segment, .ui.primary.inverted.segment {
+    background-image: url("https://semantic-ui.com/images/backgrounds/11.jpg");
+}
+
+
+
 .hidden.menu {
     display: none;
 }
