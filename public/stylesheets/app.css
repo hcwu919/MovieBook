@@ -1,6 +1,10 @@
+.ui.inverted.segment  {
+    background-image: url("https://media.giphy.com/media/ATGtSpJKlh6Sc/giphy.gif"); //https://semantic-ui.com/images/backgrounds/11.jpg
+    background-size: ;
+}
 
-.ui.inverted.segment, .ui.primary.inverted.segment {
-    background-image: url("https://semantic-ui.com/images/backgrounds/11.jpg");
+.ui.primary.inverted.segment {
+    background-image: url("https://semantic-ui.com/images/backgrounds/11.jpg"); //https://semantic-ui.com/images/backgrounds/11.jpg
 }
 
 
