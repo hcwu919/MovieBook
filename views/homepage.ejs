@@ -1,7 +1,9 @@
 
 <html>
 <head>
+
     <title>MovieBook</title>
+
 
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -59,6 +61,7 @@
         <a class="item">Work</a>
         <a class="item">Company</a>
         <a class="item">Careers</a>
+
         <div class="right menu">
             <div class="item">
                 <a class="ui button">Log in</a>
@@ -70,8 +73,9 @@
     </div>
 </div>
 
+
 <!-- Sidebar Menu -->
-<div class="ui vertical inverted sidebar menu">
+<div class="ui sidebar inverted vertical menu">
     <a class="active item">Home</a>
     <a class="item">Work</a>
     <a class="item">Company</a>
@@ -84,26 +88,47 @@
 <!-- Page Contents -->
 <div class="pusher">
     <div class="ui inverted vertical masthead center aligned segment">
-
         <div class="ui container">
             <div class="ui large secondary inverted pointing menu">
+                <div class="item">
+                    <!--<div class="ui logo shape">-->
+                        <!--<div class="sides">-->
+                            <div class="active ui side" style="position: fixed; top: 10px; left: 10px; z-index: auto;">
+                                <img height=60 class="ui image" src="https://static1.squarespace.com/static/58e7ac565016e1384d799887/t/58e7acb9725e255284fd0dbf/1511366743027/?format=1500w">
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
                 <a class="toc item">
                     <i class="sidebar icon"></i>
                 </a>
+
                 <a class="active item">Home</a>
                 <a class="item">Work</a>
                 <a class="item">Company</a>
                 <a class="item">Careers</a>
+                <!--<div class="item">-->
+                <div class="search item">
+                    <div class="ui icon input">
+                        <input class="prompt" type="text" placeholder="Search movies...">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                </div>
+                <!--</div>-->
+
+
                 <div class="right item">
-                    <a class="ui inverted button">Log in</a>
-                    <a class="ui inverted button">Sign Up</a>
+                    <a class="ui inverted button" href="/login">Login</a>
+                    <a class="ui inverted button" href="/">Signup</a>
                 </div>
             </div>
         </div>
 
         <div class="ui text container">
             <h1 class="ui inverted header">
-                Imagine-a-Company
+                MovieBook
             </h1>
             <h2>Do whatever you want when you want to.</h2>
             <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
