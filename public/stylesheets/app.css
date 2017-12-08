@@ -13,7 +13,17 @@
     background-size: contain;
 }
 
+#topChart {
+    padding-top: 30pt;
+    padding-bottom: 30pt;
+    height: 1cm;
+}
 
+/*#IMDb.column{*/
+    /*height: 50%;*/
+    /*width: 50%;*/
+    /*position: fixed;*/
+/*}*/
 
 .hidden.menu {
     display: none;
