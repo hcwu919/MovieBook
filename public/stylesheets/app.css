@@ -1,3 +1,4 @@
+
 .ui.inverted.segment, .ui.primary.inverted.segment  {
     background-image: url("https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif"); //https://semantic-ui.com/images/backgrounds/11.jpg
     background-repeat: no-repeat;
@@ -11,7 +12,6 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
-
 
 
 
@@ -30,7 +30,7 @@
     margin-left: 0.5em;
 }
 .masthead h1.ui.header {
-    margin-top: 3em;
+    margin-top: 2em;
     margin-bottom: 0em;
     font-size: 4em;
     font-weight: normal;
