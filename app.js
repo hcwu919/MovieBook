@@ -22,21 +22,30 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // homepage
 app.get("/", function(req, res) {
-	res.render("homepage");
+    res.render("homepage");
 });
 
-app.get('/search', function(req, res) {
-    connection.query('SELECT title from Movie where title like "%'+req.query.key+'%"',
-    function(err, rows, fields) {
-        if (err) throw err;
-        var data=[];
-        for(i=0;i<rows.length;i++)
-        {
-            data.push(rows[i].title);
-        }
-        res.end(JSON.stringify(data));
-    });
+app.post('/result', function(req, res) {
+
+    var content = req.body.searchContent;
+    // content = content.split("").join("''");
+    var type = req.body.searchType;
+    console.log(type);
+    console.log(content);
+    var query;
+    // if(type=="title") {
+        query = "SELECT distinct title from Movie WHERE title LIKE '%" + content + "%' LIMIT 50";
+        connection.query(query, function (err, movies) {
+
+            if (err) throw err;
+            console.log(JSON.stringify(movies));
+            // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+            res.render('result', {movies: movies});
+        });
+    // }
 });
+
+
 
 app.get("/movie", function(req, res) {
 	res.render("movie");
