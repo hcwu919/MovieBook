@@ -29,7 +29,7 @@ def getRecommendedItems(prefs, itemMatch, user):
             totalSim.setdefault(item2, 0)
             totalSim[item2] += similarity
     # Divide each total score by total weighting to get an average
-    rankings = [(score / totalSim[item], item) for (item, score) in
+    rankings = [[score / totalSim[item], item] for (item, score) in
                 scores.items()]
     # Return the rankings from highest to lowest
     rankings.sort()
@@ -44,6 +44,9 @@ def main():
     itemsim_small_load = pickle.load(open('itemsim_small_rfc.pkl', "rb"))
 
     return getRecommendedItems(prefs_small_load, itemsim_small_load, lines)[0:10]
+# [[ , title, ],
+#  [],
+#  ...]
 
 #start process
 if __name__ == '__main__':

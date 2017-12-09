@@ -25,8 +25,8 @@ app.get("/", function(req, res) {
     res.render("homepage");
 });
 
+// search box
 app.post('/result', function(req, res) {
-
     var content = req.body.searchContent;
     // content = content.split("").join("''");
     var type = req.body.searchType;
@@ -44,8 +44,6 @@ app.post('/result', function(req, res) {
         });
     // }
 });
-
-
 
 app.get("/movie", function(req, res) {
 	res.render("movie");
@@ -86,7 +84,7 @@ app.get('/homepage/:id', function(req, res) {
     res.render('homepage/:id')
 });
 
-
+app.get('s')
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
