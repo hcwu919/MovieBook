@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+var request = require("request");
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'database2017.c7dghyf3qfms.us-west-2.rds.amazonaws.com',
@@ -67,9 +68,32 @@ app.post('/result', function(req, res) {
 
 
 
+
+app.post("/apisearch", function (req, res) {
+    var content = req.body.searchContent;
+    console.log(content);
+    // content = content.split("").join("''");
+    var type = req.body.searchType;
+    var url = "http://www.omdbapi.com/?i=tt3896198&apikey=b5cf18e9&t="+content;
+    request(url,function (error, response, body) {
+        console.log(JSON.parse(body));
+        if (error) {
+            throw error;
+        } else {
+            var data = JSON.parse(body);
+            console.log(data);
+            res.render('apisearch',{movie:data})
+        }
+
+    })
+})
+
+
 app.get("/movie", function(req, res) {
-	res.render("movie");
+    res.render("movie");
 });
+
+
 
 // movie details
 app.get('/movieDetails', function(req, res) {

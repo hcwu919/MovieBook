@@ -1,0 +1,65 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MovieBook Search</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
+    <link rel="stylesheet" href="../../stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="../../stylesheets/style.css">
+    <style>
+        body    { padding-top: 80px; }
+
+        .review > div {
+            display: inline-block;
+        }
+
+        .para {
+            text-align: left;
+            margin-left: 120px;
+        }
+
+        a > button {
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="well">
+
+        <div class="review">
+
+            <div class="para">
+                <img width="300" height="200"  src="<%= movie["Poster"] %>">
+                <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
+                <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
+                <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
+                <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>
+                <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>
+                <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>
+                <p> <strong>Director: </strong> <%= movie["Director"] %> </p>
+                <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>
+                <p> <strong>Country: </strong> <%= movie["Country"] %> </p>
+                <p> <strong>Language: </strong> <%= movie["Language"] %> </p>
+                <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>
+                <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>
+                <p>
+                    <% movie["Ratings"].forEach(function (rate) {  %>
+                        <li><%= rate["Source"] %> : <%= rate["Value"] %></li>
+                    <% }) %>
+                </p>
+                <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
