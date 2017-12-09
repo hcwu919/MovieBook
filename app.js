@@ -26,6 +26,7 @@ app.get("/", function(req, res) {
     res.render("homepage");
 });
 
+// search box
 
 app.get('/search', function (req, res) {
     // var content = req.body.searchContent;
@@ -47,7 +48,6 @@ app.get('/search', function (req, res) {
 });
 
 app.post('/result', function(req, res) {
-
     var content = req.body.searchContent;
     // content = content.split("").join("''");
     var type = req.body.searchType;
@@ -85,8 +85,9 @@ app.post("/apisearch", function (req, res) {
             res.render('apisearch',{movie:data})
         }
 
-    })
-})
+    });
+});
+
 
 
 app.get("/movie", function(req, res) {
