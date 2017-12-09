@@ -30,7 +30,7 @@
 }
 
 .masthead.segment {
-    min-height: 700px;
+    min-height: 580px;
     padding: 1em 0em;
 }
 .masthead .logo.item img {
@@ -51,8 +51,9 @@
 }
 
 .ui.vertical.stripe {
-    padding: 8em 0em;
+    padding: 4em 0em;
 }
+
 .ui.vertical.stripe h3 {
     font-size: 2em;
 }
@@ -69,6 +70,7 @@
 .ui.vertical.stripe .horizontal.divider {
     margin: 3em 0em;
 }
+
 
 .quote.stripe.segment {
     padding: 0em;

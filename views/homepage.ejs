@@ -45,30 +45,18 @@
 
     <title>MovieBook</title>
 
-
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <title> Home Page </title>
+    <title> MovieBook </title>
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
 
-
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.js"></script>
 
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>-->
-
-    <!--<script-->
-        <!--src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"-->
-        <!--integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="-->
-        <!--crossorigin="anonymous">-->
-    <!--</script>-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css"></script>-->
-    <!--<script src="jquery.slim.js"></script>-->
     <script>
         $(document)
             .ready(function() {
@@ -120,13 +108,34 @@
         </div>
 
         <div class="right menu">
-            <div class="item">
-                <a class="ui button" href="/login">Log in</a>
-            </div>
-            <div class="item">
-                <a class="ui primary button">Sign Up</a>
-            </div>
+        <div class="item">
+        <a class="ui button" href="/login">My Profile</a>
         </div>
+        <div class="item">
+        <a class="ui primary button">Sign Out</a>
+        </div>
+        </div>
+         <!--if(!isLogin){ -->
+        <!--<div class="right menu">-->
+            <!--<div class="item">-->
+                <!--<a class="ui button" href="/login">Log in</a>-->
+            <!--</div>-->
+            <!--<div class="item">-->
+                <!--<a class="ui primary button">Sign Up</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- }else{ -->
+        <!--<div class="right menu">-->
+            <!--<div class="item">-->
+                <!--<a class="ui button" href="/login">My Profile</a>-->
+            <!--</div>-->
+            <!--<div class="item">-->
+                <!--<a class="ui primary button">Sign Out</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- } -->
+
+
     </div>
 </div>
 
@@ -143,7 +152,8 @@
 
 
 <!-- Page Contents -->
-<div class="pusher">
+<div id="mainpage" class="pusher">
+
     <div class="ui inverted vertical masthead center aligned segment">
         <div class="ui container">
 
@@ -153,10 +163,10 @@
                 <a class="toc item">
                     <i class="sidebar icon"></i>
                 </a>
-                <a class="active item">Home</a>
-                <a class="item">Work</a>
-                <a class="item">Company</a>
-                <a class="item">Careers</a>
+                <a class="active item">MovieBook</a>
+                <a class="item">Movies</a>
+                <a class="item">Genre</a>
+                <a class="item">Rank</a>
                 <!--<div class="item">-->
                 <div class="search item">
                     <div class="ui icon input">
@@ -181,12 +191,22 @@
                 MovieBook
             </h1>
             <h2>Do whatever you want when you want to.</h2>
-            <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
+            <a href="/#start" class="ui huge inverted basic button">Get Started <i class="right down arrow icon"></i></a>
+            <a href="/search" class="ui huge inverted basic button">Search Movie <i class="right search icon"></i></a>
         </div>
 
     </div>
 
-    <div class="ui vertical stripe segment">
+
+
+    <div id="start" class="ui vertical stripe segment">
+        <div  class="center aligned row">
+            <div class="ui text container">
+                <h1 class="ui horizontal header divider">
+                    <a href="#">Recommendation</a>
+                </h1>
+            </div>
+        </div>
         <div class="ui middle aligned stackable grid container">
             <div class="row">
                 <div class="eight wide float-left column" style="padding-left: 10%">
@@ -204,7 +224,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="center aligned column">
+                <div id="sym" class="center aligned column">
                     <a class="ui huge button">Search Your Movie</a>
                 </div>
             </div>
@@ -220,16 +240,16 @@
     </div>
 
 
-    <div class="ui vertical stripe quote segment">
+    <div class="ui container vertical stripe quote segment">
         <div class="ui equal width stackable internally celled grid">
             <div class="center aligned row">
                 <div style="position: relative;" class="column">
                     <!--<img id="IMDb" src="http://static.wixstatic.com/media/8f068a_5c1ba6d94c9f40ee88930cceeaa3a9f2.png">-->
-                    <img height="120" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
+                    <img height="100" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
                 </div>
                 <div style="position: relative;" class="column">
                     <!-- Metacritic -->
-                    <img height="90" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
+                    <img height="80" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
                 </div>
             </div>
             <div class="center aligned row">
@@ -239,7 +259,7 @@
                 <div style="position: relative;" class="column">
                     <!-- Fandango Stars -->
                     <!--<h3>Fandango Stars</h3>-->
-                    <img height="110" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
+                    <img height="105" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
                 </div>
             </div>
         </div>

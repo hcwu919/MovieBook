@@ -26,6 +26,26 @@ app.get("/", function(req, res) {
 });
 
 // search box
+
+app.get('/search', function (req, res) {
+    // var content = req.body.searchContent;
+    // // content = content.split("").join("''");
+    // var type = req.body.searchType;
+    // console.log(type);
+    // console.log(content);
+    // var query;
+    // // if(type=="title") {
+    // query = "SELECT distinct title from Movie WHERE title LIKE '%" + content + "%' LIMIT 50";
+    // connection.query(query, function (err, movies) {
+    //
+    //     if (err) throw err;
+    //     console.log(JSON.stringify(movies));
+    //     // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+    //     res.render('result', {movies: movies});
+    // });
+    res.render('search');
+});
+
 app.post('/result', function(req, res) {
     var content = req.body.searchContent;
     // content = content.split("").join("''");
@@ -50,17 +70,19 @@ app.get("/movie", function(req, res) {
 });
 
 // movie details
-app.get('/movie/:id', function(req, res) {
+app.get('/movieDetails', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
 
-    var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
-    connection.query(query, function (err, movies) {
-        if(err) throw err;
-        console.log(query);
-        var movie = movies[0]["title"];
-        res.render('movieDetails', {movie : movie});
-    })
+    res.render('movieDetails');
+
+    // var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
+    // connection.query(query, function (err, movies) {
+    //     if(err) throw err;
+    //     console.log(query);
+    //     var movie = movies[0]["title"];
+    //     res.render('movieDetails', {movie : movie});
+    // })
 });
 
 app.get('/login', function (req, res) {
@@ -76,13 +98,9 @@ app.get('/login', function (req, res) {
         res.render('homepage/:id', {movie : movies});
     })
 
-    res.render("homepage/:id");
+    res.render("homepage");
 });
 
-// homepage after login with recommendation
-app.get('/homepage/:id', function(req, res) {
-    res.render('homepage/:id')
-});
 
 app.get('s')
 
