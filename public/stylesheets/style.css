@@ -1,0 +1,61 @@
+body {
+    background: url("http://orig11.deviantart.net/b6a3/f/2011/157/7/d/background_by_dilshan91-d3i95ek.jpg");
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+img {
+    display: inline-block;
+    margin: 20px;
+    margin-left: 50px;
+    margin-top: 40px;
+    width: 160px;
+}
+
+.image { 
+    position: relative; 
+}
+
+.link { 
+    position: absolute; 
+    top: 150px; 
+    left: 50px; 
+    margin-right: 20px; 
+}
+
+select {
+    margin-top: 6px;
+}
+
+body > div {
+    margin-top: 50px;
+}
+
+h1 {
+  text-align: center;
+  size: 3;
+}
+
+.poster {
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h3 {
+    color: rgb(255, 255, 255);
+}
+
+.para {
+    margin-left: 40px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 150%;
+    width: 60%;
+}
+
+.review > p {
+    display: inline-block;
+    margin-left: 40px;
+}
