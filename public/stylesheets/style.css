@@ -1,5 +1,7 @@
 body {
-    background: url("http://orig11.deviantart.net/b6a3/f/2011/157/7/d/background_by_dilshan91-d3i95ek.jpg");
+    background: url(""); /*https://wallpaperscraft.com/image/shadow_logo_batman_dark_knight_74504_1280x720.jpg*/
+    background-size: cover;
+    background-color: lightgrey;
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
