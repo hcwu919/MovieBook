@@ -208,7 +208,7 @@
                 <a href="#" style="color: #011d37;"><i class="bar chart icon"></i>Recommendation For You</a>
             </h1>
         </div>
-        <div class="ui middle aligned stackable grid container" style="width: 1127px + 20em">
+        <div class="ui middle aligned stackable grid container">
             <div class="row">
                 <div class="eight wide float-left column" style="padding-left: 10%">
 
@@ -216,12 +216,12 @@
 
                     <div id="rec-top" class="ui inverted segment">
                         <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
+                            <h1 class="ui align-top header grid" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
                         </div>
                         <p>
-                            <% for(var i = 0; i < movies.length; i++){ %>
+                            <% for(var i = 0; i < 5; i++){ %>
                         <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["avg_rate"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
+                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
                         <div class="ui inverted divider"></div>
                         <% } %>
                         </p>
@@ -248,12 +248,12 @@
 
                     <div id="rec-top" class="ui inverted segment">
                         <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header" style="color: hotpink"><i class="large heart icon" ></i>Most Liked </h1>
+                            <h1 class="ui align-top header grid" style="color: hotpink"><i class="large heart icon" ></i>Most Liked </h1>
                         </div>
                         <p>
-                            <% for(var i = 0; i < movies.length; i++){ %>
-                        <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["avg_rate"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
+                            <% for(var i = 5; i < movies.length; i++){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                                <a class="right aligned" href="/rank" style="font-size: large; ">Liked: <%= movies[i]["rating"] %></a> </strong></h2>
                         <div class="ui inverted divider"></div>
                         <% } %>
                         </p>
@@ -275,7 +275,7 @@
             </div>
             <div class="row">
                 <div id="sym" class="center aligned column">
-                    <a class="ui huge button">Search Your Movie</a>
+                    <a class="ui huge button" href="/search">Search Other Movies </a>
                 </div>
             </div>
         </div>
