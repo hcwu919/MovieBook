@@ -2,7 +2,6 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
 var request = require("request");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
@@ -19,7 +18,7 @@ var connection = mysql.createConnection({
 
 
 connection.connect();
-mongoose.connect("mongodb://localhost/users");
+mongoose.createConnection("mongodb://localhost/users");
 app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
@@ -68,6 +67,47 @@ app.post('/result', function(req, res) {
             if (err) throw err;
             // console.log(JSON.stringify(movies[0]["IMDB"]));
             // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+            res.render('result', {movies: movies});
+        });
+    }
+    if(type=="actors") {
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+            "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
+            "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
+            "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.actor_1_name LIKE '%" + content + "%' OR d.actor_2_name " +
+            "LIKE '%" + content + "%' OR d.actor_3_name LIKE '%" + content + "%' group by m.title LIMIT 50";
+        connection.query(query, function (err, movies) {
+            if (err) throw err;
+            res.render('result', {movies: movies});
+        });
+    }
+    if(type=="country") {
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+            "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
+            "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
+            "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.country LIKE '%" + content + "%' group by m.title LIMIT 50";
+        connection.query(query, function (err, movies) {
+            if (err) throw err;
+            res.render('result', {movies: movies});
+        });
+    }
+    if(type=="year") {
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+            "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
+            "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
+            "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.title_year LIKE '%" + content + "%' group by m.title LIMIT 50";
+        connection.query(query, function (err, movies) {
+            if (err) throw err;
+            res.render('result', {movies: movies});
+        });
+    }
+    if(type=="genres") {
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+            "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
+            "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
+            "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE g.genres LIKE '%" + content + "%' group by m.title LIMIT 50";
+        connection.query(query, function (err, movies) {
+            if (err) throw err;
             res.render('result', {movies: movies});
         });
     }
