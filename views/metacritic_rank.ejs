@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>MovieBook Rotten_Tomatoes</title>
+    <title>MovieBook Metacritic</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
     <link rel="stylesheet" href="../../stylesheets/bootstrap.css">
@@ -79,17 +79,14 @@
 <div class="container">
     <div class="well">
         <div class="ui container">
-            <img height="90" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
             <img height="37" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
-            <img height="110" width="35%" src="http://www.userlogos.org/files/logos/jumpordie/rottentomatoes_01.png">
-            <img height="76" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
         </div>
         <div class="review">
             <!--Name(title), Year(title_year), Duration(duration), Genre(genres), Actors(actor_1_name, -->
             <!--actor_2_name, actor_3_name), Country(country), Ratings, IMDB(movie_imdb_link)-->
             <div class="para">
                 <p> <strong>Name: </strong> <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </p>
-                <p> <li> Average Rate: <%= movies[i]["avg_rate"].toString().substring(0, 4) %>/10.0 </li> </p>
+                <p> <li> Metacritic: <%= movies[i]["Metacritic"] %>/100 </li> </p>
             </div>
         </div>
     </div>

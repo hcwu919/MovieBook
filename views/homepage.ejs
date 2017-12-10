@@ -96,9 +96,9 @@
 
         </a>
         <a class="active item">Home</a>
-        <a class="item">Work</a>
-        <a class="item">Company</a>
-        <a class="item">Careers</a>
+        <a class="item">Movies</a>
+        <a class="item">Genre</a>
+        <a class="item" href="/rank">Rank</a>
         <div class="ui search item">
             <div class="ui icon input">
                 <input class="prompt" type="text" placeholder="Search movies..." style="width:300px;">
@@ -143,9 +143,9 @@
 <!-- Sidebar Menu -->
 <div class="ui sidebar inverted vertical menu">
     <a class="active item">Home</a>
-    <a class="item">Work</a>
-    <a class="item">Company</a>
-    <a class="item">Careers</a>
+    <a class="item">Movies</a>
+    <a class="item">Genre</a>
+    <a class="item" href="/rank">Rank</a>
     <a class="item" href="/login">Log in</a>
     <a class="item" href="/register">Sign up</a>
 </div>
@@ -166,7 +166,7 @@
                 <a class="active item">MovieBook</a>
                 <a class="item">Movies</a>
                 <a class="item">Genre</a>
-                <a class="item">Rank</a>
+                <a class="item" href="/rank">Rank</a>
                 <!--<div class="item">-->
                 <div class="search item">
                     <div class="ui icon input">
@@ -243,23 +243,31 @@
     <div class="ui container vertical stripe quote segment">
         <div class="ui equal width stackable internally celled grid">
             <div class="center aligned row">
-                <div style="position: relative;" class="column">
-                    <!--<img id="IMDb" src="http://static.wixstatic.com/media/8f068a_5c1ba6d94c9f40ee88930cceeaa3a9f2.png">-->
-                    <img height="100" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
-                </div>
+                    <div style="position: relative;" class="column">
+                        <a href="/imdb">
+                        <!--<img id="IMDb" src="http://static.wixstatic.com/media/8f068a_5c1ba6d94c9f40ee88930cceeaa3a9f2.png">-->
+                            <img height="100" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
+                        </a>
+                    </div>
                 <div style="position: relative;" class="column">
                     <!-- Metacritic -->
-                    <img height="80" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
+                    <a href="/metacritic">
+                        <img height="80" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
+                    </a>
                 </div>
             </div>
             <div class="center aligned row">
                 <div style="position: relative;" class="column">
-                    <img height="140" width="35%" src="http://www.userlogos.org/files/logos/jumpordie/rottentomatoes_01.png">
+                    <a href="rotten_tomatoes">
+                        <img height="140" width="35%" src="http://www.userlogos.org/files/logos/jumpordie/rottentomatoes_01.png">
+                    </a>
                 </div>
                 <div style="position: relative;" class="column">
                     <!-- Fandango Stars -->
                     <!--<h3>Fandango Stars</h3>-->
-                    <img height="105" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
+                    <a href="/fandango">
+                        <img height="105" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
+                    </a>
                 </div>
             </div>
         </div>

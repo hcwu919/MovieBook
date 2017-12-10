@@ -209,6 +209,59 @@ function isLoggedIn(res, req, next) {
     res.redirect("/login");
 }
 
+// imdb rank
+app.get('/imdb', function (req, res) {
+    query = "Select distinct M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+        "Order by MR.IMDB Desc Limit 10";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('imdb_rank', {movies: movies});
+    });
+});
+
+// metacritic rank
+app.get('/metacritic', function (req, res) {
+    query = "Select distinct M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+        "Order by MR.Metacritic Desc Limit 10";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('metacritic_rank', {movies: movies});
+    });
+});
+
+// rotten tomatoes rank
+app.get('/rotten_tomatoes', function (req, res) {
+    query = "Select distinct M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+        "Order by MR.RottenTomatoes Desc Limit 10";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('tomato_rank', {movies: movies});
+    });
+});
+
+// fadango rank
+app.get('/fandango', function (req, res) {
+    query = "Select distinct M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('fandango_rank', {movies: movies});
+    });
+});
+
+// rank of all
+app.get('/rank', function (req, res) {
+    query = "Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
+        ")/4 AS avg_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 10";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('ranklist', {movies: movies});
+    });
+});
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
