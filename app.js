@@ -41,7 +41,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // homepage
 app.get("/",function(req, res) {
-    // console.log(req.user);
+    // =========  log in ? ==============
     var isLogin = false;
     console.log(JSON.stringify(req.user));
     var username = req.user;
@@ -52,7 +52,15 @@ app.get("/",function(req, res) {
         username = JSON.parse(username)["username"];
     }
     console.log("isLogin = ", isLogin, "username = ", username);
-    res.render("homepage", {isLogin : isLogin, username: username});
+
+    //===========   Recommendation   ============
+    var query = "Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
+        ")/4 AS avg_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 5";
+    connection.query(query, function (err, movies) {
+        if (err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('homepage', {movies: movies, isLogin : isLogin, username: username});
+    });
 });
 
 // search page
@@ -221,6 +229,9 @@ function isLoggedIn(res, req, next) {
     res.redirect("/login", {isLogin: isLogin});
 }
 
+
+
+// ================== Rank List =======================
 // imdb rank
 app.get('/imdb', function (req, res) {
     query = "Select distinct M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +

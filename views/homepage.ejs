@@ -85,7 +85,7 @@
                     <a class="ui inverted red button" href="/login">Log in</a>
                 </div>
                 <div class="item">
-                    <a class="ui inverted red button" href="/register">Sign Up</a>
+                    <a class="ui inverted red button" href="/register">Sign up</a>
                 </div>
             </div>
         <% }else{ %>
@@ -211,29 +211,80 @@
 
 
 
+
+
     <div id="start" class="ui vertical stripe segment">
+
         <div  class="center aligned row">
-            <div class="ui text container">
-                <h1 class="ui horizontal header divider">
-                    <a href="#">Recommendation</a>
-                </h1>
-            </div>
+            <h1 class="ui horizontal header divider">
+
+                <a href="#" style="color: #011d37;"><i class="bar chart icon"></i>Recommendation For You</a>
+            </h1>
         </div>
-        <div class="ui middle aligned stackable grid container">
+        <div class="ui middle aligned stackable grid container" style="width: 1127px + 20em">
             <div class="row">
                 <div class="eight wide float-left column" style="padding-left: 10%">
+
+                    <% if(!isLogin){ %>
+
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
+                        </div>
+                        <p>
+                            <% for(var i = 0; i < movies.length; i++){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["avg_rate"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
+                        <div class="ui inverted divider"></div>
+                        <% } %>
+                        </p>
+
+                    </div>
+                    <div>
+
+                    </div>
+                    <% }else{ %>
                     <div class="align-top" style="padding-bottom: 10%">
-                        <h1 class="ui align-top header">Recommendation For You</h1>
+                        <h1 class="ui align-top header">Guess You Like</h1>
                     </div>
                     <div>
                         <h2>1. xxxxxxxxxx</h2>
                         <h2>2. xxxxxxxxxx</h2>
                         <h2>3. xxxxxxxxxx</h2>
                     </div>
+                    <% } %>
+
+
                 </div>
-                <div class="six wide right floated column">
-                    <img src="http://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/1966.png&w=350&h=254" class="ui large bordered rounded image">
-                </div>
+                <div class="eight wide float-right column" style="padding-left: 10%">
+                    <% if(!isLogin){ %>
+
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header" style="color: hotpink"><i class="large heart icon" ></i>Most Liked </h1>
+                        </div>
+                        <p>
+                            <% for(var i = 0; i < movies.length; i++){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["avg_rate"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
+                        <div class="ui inverted divider"></div>
+                        <% } %>
+                        </p>
+
+                    </div>
+                    <div>
+
+                    </div>
+                    <% }else{ %>
+                    <div class="align-top" style="padding-bottom: 10%">
+                        <h1 class="ui align-top header">Guess You Like</h1>
+                    </div>
+                    <div>
+                        <h2>1. xxxxxxxxxx</h2>
+                        <h2>2. xxxxxxxxxx</h2>
+                        <h2>3. xxxxxxxxxx</h2>
+                    </div>
+                    <% } %>                </div>
             </div>
             <div class="row">
                 <div id="sym" class="center aligned column">
@@ -243,16 +294,12 @@
         </div>
     </div>
 
-    <div id="topChart" class="center aligned row">
-        <div class="ui text container">
+    <div class="ui container vertical stripe quote segment">
+        <div  class="center aligned row">
             <h1 class="ui horizontal header divider">
-                <a href="#">Top Charts</a>
+                <a href="#" style="color: #011d37;"><i class="bar chart icon"></i>Top Charts</a>
             </h1>
         </div>
-    </div>
-
-
-    <div class="ui container vertical stripe quote segment">
         <div class="ui equal width stackable internally celled grid">
             <div class="center aligned row">
                     <div style="position: relative;" class="column">
