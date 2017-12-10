@@ -19,6 +19,8 @@
     <script>
         $(document)
             .ready(function() {
+                $('.ui.dropdown')
+                    .dropdown();
 
                 // fix menu when passed
                 $('.masthead')
@@ -57,7 +59,18 @@
         <a class="active item">Home</a>
         <a class="item">Movies</a>
         <a class="item">Genre</a>
-        <a class="item" href="/rank">Rank</a>
+            <a class="item" href="/rank">
+                <div class="ui inline dropdown">
+                    <div class="text">Rank</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="header">Adjust time span</div>
+                        <div class="active item" data-text="today">Today</div>
+                        <div class="item" data-text="this week">This Week</div>
+                        <div class="item" data-text="this month">This Month</div>
+                    </div>
+                </div>
+            </a>
         <div class="ui search item">
             <div class="ui icon input">
                 <input class="prompt" type="text" placeholder="Search movies..." style="width:300px;">
@@ -77,10 +90,10 @@
         <% if(!isLogin){ %>
             <div class="right menu">
                 <div class="item">
-                    <a class="ui button" href="/login">Log in</a>
+                    <a class="ui inverted red button" href="/login">Log in</a>
                 </div>
                 <div class="item">
-                    <a class="ui primary button">Sign Up</a>
+                    <a class="ui inverted red button" href="/register">Sign Up</a>
                 </div>
             </div>
         <% }else{ %>
@@ -126,8 +139,16 @@
                 <a class="item">Movies</a>
                 <a class="item">Genre</a>
 
-                <a class="item" href="/rank">Rank</a>
-                <!--<div class="item">-->
+                    <div class="ui item inline dropdown">
+                        Rank
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item"><a style="color: inherit" href="/rank">Today</a></div>
+                            <div class="item">This Week</div>
+                            <div class="item">This Month</div>
+                        </div>
+                    </div>
+
                 <div class="search item">
                     <div class="ui icon input">
                         <input class="prompt" type="text" placeholder="Search movies..." style="width:400px;">
@@ -136,10 +157,6 @@
                     <div class="results"></div>
                 </div>
 
-                <!--<div class="right item">-->
-                    <!--<a class="ui inverted button" href="/login">Log in</a>-->
-                    <!--<a class="ui inverted button" href="/register">Sign up</a>-->
-                <!--</div>-->
 
                 <% if(!isLogin){ %>
                 <div class="right item">
