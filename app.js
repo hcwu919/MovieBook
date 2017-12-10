@@ -50,6 +50,7 @@ app.get("/",function(req, res) {
         isLogin = true;
         username = JSON.stringify(username);
         username = JSON.parse(username)["username"];
+        
     }
     console.log("isLogin = ", isLogin, "username = ", username);
 
