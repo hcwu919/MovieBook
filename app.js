@@ -23,7 +23,7 @@ app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
     saveUninitialized : false
-}))
+}));
 
 // var server = http.createServer(app);
 app.set('views',__dirname + '/views');
