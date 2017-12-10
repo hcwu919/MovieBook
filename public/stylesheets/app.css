@@ -1,3 +1,7 @@
+#toprate .ui.grid.container{
+    width: 5000px;
+}
+
 #rec-top {
     background: none;
     background-image: none;

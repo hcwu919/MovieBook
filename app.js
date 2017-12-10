@@ -55,14 +55,30 @@ app.get("/",function(req, res) {
     console.log("isLogin = ", isLogin, "username = ", username);
 
     //===========   Recommendation   ============
-    var query = "Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
-        ")/4 AS avg_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 5";
+    var query =
+        "(Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
+        "From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by rating  DESC Limit 5)\n" +
+        "Union All\n" +
+        "(SELECT m.title, COUNT(*) As rating \n" +
+        "FROM user_like ul natural JOIN Movie m\n" +
+        "WHERE ul.rating > 3\n" +
+        "GROUP BY ul.imdbId\n" +
+        "ORDER BY rating  DESC\n" +
+        "Limit 3, 5)";
+
+
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
         res.render('homepage', {movies: movies, isLogin : isLogin, username: username});
     });
 });
+
+
+
+
+
+//============================== Search =========================================
 
 // search page
 app.get('/search', function (req, res) {
@@ -164,17 +180,12 @@ app.get('/movieDetails', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
     res.render('movieDetails');
-    // var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
-    // connection.query(query, function (err, movies) {
-    //     if(err) throw err;
-    //     console.log(query);
-    //     var movie = movies[0]["title"];
-    //     res.render('movieDetails', {movie : movie});
-    // })
 });
 
+//==============================================================================
 
-// ======== AUTH ROUT ===========
+
+// ============================== AUTH ROUT =====================================
 // app.get('/secret', function (req, res) {
 //     res.render("secret");
 // });
@@ -230,9 +241,9 @@ function isLoggedIn(res, req, next) {
     res.redirect("/login", {isLogin: isLogin});
 }
 
+// =======================================================================
 
-
-// ================== Rank List =======================
+// ================== Rank List ============================================
 // imdb rank
 app.get('/imdb', function (req, res) {
     query = "Select distinct M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
@@ -286,6 +297,9 @@ app.get('/rank', function (req, res) {
         res.render('ranklist', {movies: movies});
     });
 });
+//===========================================================================
+
+
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
