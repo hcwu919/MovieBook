@@ -1,3 +1,7 @@
+#rankinglist {
+    width: 100%;
+}
+
 
 .ui.inverted.segment {
     background-image: url("https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif"); /*https://semantic-ui.com/images/backgrounds/11.jpg*/
