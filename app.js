@@ -27,25 +27,10 @@ app.get("/", function(req, res) {
 });
 
 // search box
-
 app.get('/search', function (req, res) {
-    // var content = req.body.searchContent;
-    // // content = content.split("").join("''");
-    // var type = req.body.searchType;
-    // console.log(type);
-    // console.log(content);
-    // var query;
-    // // if(type=="title") {
-    // query = "SELECT distinct title from Movie WHERE title LIKE '%" + content + "%' LIMIT 50";
-    // connection.query(query, function (err, movies) {
-    //
-    //     if (err) throw err;
-    //     console.log(JSON.stringify(movies));
-    //     // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
-    //     res.render('result', {movies: movies});
-    // });
     res.render('search');
 });
+
 
 app.post('/result', function(req, res) {
     var content = req.body.searchContent;
@@ -54,19 +39,21 @@ app.post('/result', function(req, res) {
     console.log(type);
     console.log(content);
     var query;
-    // if(type=="title") {
-        query = "SELECT distinct title from Movie WHERE title LIKE '%" + content + "%' LIMIT 50";
+    if(type=="title") {
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+            "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
+            "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
+            "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE m.title LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
-
             if (err) throw err;
-            console.log(JSON.stringify(movies));
+            // console.log(JSON.stringify(movies[0]["IMDB"]));
             // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
             res.render('result', {movies: movies});
         });
-    // }
+    }
+
+
 });
-
-
 
 
 app.post("/apisearch", function (req, res) {
@@ -82,9 +69,8 @@ app.post("/apisearch", function (req, res) {
         } else {
             var data = JSON.parse(body);
             console.log(data);
-            res.render('apisearch',{movie:data})
+            res.render('apisearch', {movie:data})
         }
-
     });
 });
 
@@ -100,9 +86,7 @@ app.get("/movie", function(req, res) {
 app.get('/movieDetails', function(req, res) {
     var mid = req.params.id;
     console.log(mid);
-
     res.render('movieDetails');
-
     // var query = "SELECT * FROM Movie WHERE imdbId = " + mid + "";
     // connection.query(query, function (err, movies) {
     //     if(err) throw err;
