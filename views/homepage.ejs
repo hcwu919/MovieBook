@@ -59,18 +59,15 @@
         <a class="active item">Home</a>
         <a class="item">Movies</a>
         <a class="item">Genre</a>
-            <a class="item" href="/rank">
-                <div class="ui inline dropdown">
-                    <div class="text">Rank</div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="header">Adjust time span</div>
-                        <div class="active item" data-text="today">Today</div>
-                        <div class="item" data-text="this week">This Week</div>
-                        <div class="item" data-text="this month">This Month</div>
-                    </div>
-                </div>
-            </a>
+        <div class="ui item inline dropdown">
+            Rank
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item"><a style="color: inherit" href="/rank">Today</a></div>
+                <div class="item">This Week</div>
+                <div class="item">This Month</div>
+            </div>
+        </div>
         <div class="ui search item">
             <div class="ui icon input">
                 <input class="prompt" type="text" placeholder="Search movies..." style="width:300px;">
@@ -79,14 +76,7 @@
             <div class="results"></div>
         </div>
 
-        <!--<div class="right menu">-->
-        <!--<div class="item">-->
-        <!--<a class="ui button" href="/login">Log in</a>-->
-        <!--</div>-->
-        <!--<div class="item">-->
-        <!--<a class="ui primary button">Sign up</a>-->
-        <!--</div>-->
-        <!--</div>-->
+
         <% if(!isLogin){ %>
             <div class="right menu">
                 <div class="item">
@@ -97,10 +87,23 @@
                 </div>
             </div>
         <% }else{ %>
+
             <div class="right menu">
-                <div class="item">
-                    <a class="ui inverted red button" href="/login">My Homepage</a>
+
+                <div class="ui item inline dropdown inverted button">
+                    <a class="ui inverted red button" >
+                        My Profile
+                        <i class="small dropdown icon" ></i>
+                    </a>
+                    <div class="menu">
+                        <div class="item"><a style="color: inherit" href="/login">Homepage</a></div>
+                        <div class="item">Likes</div>
+                        <div class="item">Friends</div>
+                    </div>
                 </div>
+                <!--<div class="item">-->
+                    <!--<a class="ui inverted red button" href="/login">My Homepage</a>-->
+                <!--</div>-->
                 <div class="item">
                     <a class="ui inverted red button" href="/logout">Sign Out</a>
                 </div>
@@ -165,7 +168,15 @@
                 </div>
                 <% }else{ %>
                 <div class="right item">
-                    <a class="ui inverted button" href="/login">My Homepage</a>
+                    <div class="ui inline dropdown inverted button">
+                            My Profile
+                            <i class="small dropdown icon" style="color: inherit"></i>
+                        <div class="menu">
+                            <div class="item"><a style="color: inherit" href="/login">Homepage</a></div>
+                            <div class="item">Likes</div>
+                            <div class="item">Friends</div>
+                        </div>
+                    </div>
                     <a class="ui inverted button" href="/logout">Sign Out</a>
                 </div>
                 <% } %>
