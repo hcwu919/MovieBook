@@ -51,7 +51,6 @@
                         <option value="title" selected> title </option>
                         <option value="actors"> actors </option>
                         <option value="country"> country </option>
-                        <option value="tag"> tag </option>
                         <option value="year"> year </option>
                         <option value="genres"> genres </option>
                     </select>
@@ -72,11 +71,25 @@
     <div class="well">
 
         <div class="review">
+            <!--Name(title), Year(title_year), Duration(duration), Genre(genres), Actors(actor_1_name, -->
+            <!--actor_2_name, actor_3_name), Country(country), Ratings, IMDB(movie_imdb_link)-->
 
             <div class="para">
-                <p> <strong>Name: </strong> <%= movies[i]["title"] %> </p>
+                <p> <strong>Name: </strong> <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </p>
+                <p> <strong>Year: </strong> <%= movies[i]["title_year"] %> </p>
+                <p> <strong>Duration: </strong> <%= movies[i]["duration"] %> min </p>
+                <p> <strong>Genre: </strong> <%= movies[i]["genres"] %> </p>
+                <p> <strong>Actors: </strong> <%= movies[i]["actor_1_name"].replace("?", "e") %>, <%= movies[i]["actor_2_name"].replace("?", "e") %>, <%= movies[i]["actor_3_name"].replace("?", "e") %> </p>
+                <p> <strong>Country: </strong> <%= movies[i]["country"] %> </p>
+                <p> <strong>Ratings: </strong> <%= movies[i][""] %> </p>
+                <p> <li> IMDB: <%= movies[i]["IMDB"] %>/10.0 </li> </p>
+                <p> <li> Metacritic: <%= movies[i]["Metacritic"] %>/100 </li> </p>
+                <p> <li> Rotten Tomatoes: <%= movies[i]["RottenTomatoes"] %>% </li> </p>
+                <p> <li> Fandango: <%= movies[i]["Fandango_Stars"] %>/5.0 </li> </p>
+                <p> <strong>IMDB Link: </strong>
+                    <<a href=<%= movies[i]["movie_imdb_link"] %> > click here to see more </a>>
+                </p>
             </div>
-
         </div>
     </div>
 </div>
