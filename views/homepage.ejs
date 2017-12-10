@@ -1,45 +1,4 @@
 
-<!--<body>-->
-<!--<nav class="navbar navbar-default">-->
-
-    <!--<div class="container-fluid">-->
-        <!--&lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;-->
-        <!--<div class="navbar-header">-->
-            <!--<a class="navbar-brand" href="/">Minion Movies</a>-->
-        <!--</div>-->
-
-        <!--&lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
-        <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
-            <!--<ul class="nav navbar-nav">-->
-                <!--<li class="active"><a href="/"> Movies <span class="sr-only">(current)</span></a></li>-->
-                <!--<li><a href="/artists"> Artists </a></li>-->
-                <!--<li><a href="/reviews"> Reviews </a></li>-->
-                <!--<li><a href="/categories"> Categories </a></li>-->
-                <!--<li><a href="/trailers"> Trailers </a></li>-->
-            <!--</ul>-->
-            <!--<form action='/result' method="post" class="navbar-form navbar-left" role="search">-->
-                <!--<div class="form-group">-->
-                    <!--<input type="text" class="form-control" size="20" placeholder="Search movies or people here" name="searchContent">-->
-                <!--</div>-->
-                <!--<select name="searchType" size="1">-->
-                    <!--<option value="title" selected> title </option>-->
-                    <!--<option value="actors"> actors </option>-->
-                    <!--<option value="country"> country </option>-->
-                    <!--<option value="tag"> tag </option>-->
-                    <!--<option value="year"> year </option>-->
-                    <!--<option value="genres"> genres </option>-->
-                <!--</select>-->
-                <!--<button type="submit" class="btn btn-default">Search</button>-->
-            <!--</form>-->
-
-
-
-        <!--</div>&lt;!&ndash; /.navbar-collapse &ndash;&gt;-->
-    <!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
-<!--</nav>-->
-
-<!--===================================================================================================-->
-
 <html>
 <head>
 
@@ -107,33 +66,33 @@
             <div class="results"></div>
         </div>
 
-        <div class="right menu">
-        <div class="item">
-        <a class="ui button" href="/login">Log in</a>
-        </div>
-        <div class="item">
-        <a class="ui primary button">Sign up</a>
-        </div>
-        </div>
-         <!--if(!isLogin){ -->
         <!--<div class="right menu">-->
-            <!--<div class="item">-->
-                <!--<a class="ui button" href="/login">Log in</a>-->
-            <!--</div>-->
-            <!--<div class="item">-->
-                <!--<a class="ui primary button">Sign Up</a>-->
-            <!--</div>-->
+        <!--<div class="item">-->
+        <!--<a class="ui button" href="/login">Log in</a>-->
         <!--</div>-->
-        <!-- }else{ -->
-        <!--<div class="right menu">-->
-            <!--<div class="item">-->
-                <!--<a class="ui button" href="/login">My Profile</a>-->
-            <!--</div>-->
-            <!--<div class="item">-->
-                <!--<a class="ui primary button">Sign Out</a>-->
-            <!--</div>-->
+        <!--<div class="item">-->
+        <!--<a class="ui primary button">Sign up</a>-->
         <!--</div>-->
-        <!-- } -->
+        <!--</div>-->
+        <% if(!isLogin){ %>
+            <div class="right menu">
+                <div class="item">
+                    <a class="ui button" href="/login">Log in</a>
+                </div>
+                <div class="item">
+                    <a class="ui primary button">Sign Up</a>
+                </div>
+            </div>
+        <% }else{ %>
+            <div class="right menu">
+                <div class="item">
+                    <a class="ui inverted red button" href="/login">My Homepage</a>
+                </div>
+                <div class="item">
+                    <a class="ui inverted red button" href="/logout">Sign Out</a>
+                </div>
+            </div>
+        <% } %>
 
 
     </div>
@@ -166,6 +125,7 @@
                 <a class="active item">MovieBook</a>
                 <a class="item">Movies</a>
                 <a class="item">Genre</a>
+
                 <a class="item" href="/rank">Rank</a>
                 <!--<div class="item">-->
                 <div class="search item">
@@ -175,13 +135,24 @@
                     </div>
                     <div class="results"></div>
                 </div>
+
+                <!--<div class="right item">-->
+                    <!--<a class="ui inverted button" href="/login">Log in</a>-->
+                    <!--<a class="ui inverted button" href="/register">Sign up</a>-->
                 <!--</div>-->
 
-
+                <% if(!isLogin){ %>
                 <div class="right item">
                     <a class="ui inverted button" href="/login">Log in</a>
                     <a class="ui inverted button" href="/register">Sign up</a>
                 </div>
+                <% }else{ %>
+                <div class="right item">
+                    <a class="ui inverted button" href="/login">My Homepage</a>
+                    <a class="ui inverted button" href="/logout">Sign Out</a>
+                </div>
+                <% } %>
+
             </div>
         </div>
 
@@ -190,7 +161,7 @@
                 <img src="https://static1.squarespace.com/static/58e7ac565016e1384d799887/t/58e7acb9725e255284fd0dbf/1511366743027/?format=1500w">
                 MovieBook
             </h1>
-            <h2>Do whatever you want when you want to.</h2>
+            <h2 id="welcome-message">Hi <%= username %>~</h2>
             <a href="/#start" class="ui huge inverted basic button">Get Started <i class="right down arrow icon"></i></a>
             <a href="/search" class="ui huge inverted basic button">Search Movie <i class="right search icon"></i></a>
         </div>

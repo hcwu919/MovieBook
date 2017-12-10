@@ -40,8 +40,19 @@ passport.deserializeUser(User.deserializeUser());
 
 
 // homepage
-app.get("/", function(req, res) {
-    res.render("homepage");
+app.get("/",function(req, res) {
+    // console.log(req.user);
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var username = req.user;
+    // var username = data["username"];
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        username = JSON.stringify(username);
+        username = JSON.parse(username)["username"];
+    }
+    console.log("isLogin = ", isLogin, "username = ", username);
+    res.render("homepage", {isLogin : isLogin, username: username});
 });
 
 // search page
@@ -167,7 +178,7 @@ app.get('/register', function (req, res) {
 
 // register logic
 app.post('/register', function (req, res) {
-    var newUser = new User({username: req.body.username});
+    var newUser = new User({username: req.body.username, password: req.body.password});
     User.register(newUser, req.body.password, function (err, user) {
         if (err) {
             console.log(err);
@@ -197,16 +208,17 @@ app.post('/login', passport.authenticate("local",
 
 
 // log out
-app.get('logout', function (req, res) {
+app.get('/logout', function (req, res) {
     req.logout();
     res.redirect("/");
-})
+});
 
 function isLoggedIn(res, req, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect("/login");
+    var isLogin = req.isAuthenticated();
+    res.redirect("/login", {isLogin: isLogin});
 }
 
 // imdb rank
