@@ -91,14 +91,13 @@
         <% }else{ %>
 
             <div class="right menu">
-
                 <div class="ui item inline dropdown inverted button">
                     <a class="ui inverted red button" >
                         My Profile
                         <i class="small dropdown icon" ></i>
                     </a>
                     <div class="menu">
-                        <div class="item"><a style="color: inherit" href="/login">Homepage</a></div>
+                        <div class="item"><a style="color: inherit" href="/userpage">Homepage</a></div>
                         <div class="item">Likes</div>
                         <div class="item">Friends</div>
                     </div>
@@ -185,7 +184,7 @@
                             My Profile
                             <i class="small dropdown icon" style="color: inherit"></i>
                         <div class="menu">
-                            <div class="item"><a style="color: inherit" href="/login">Homepage</a></div>
+                            <div class="item"><a style="color: inherit" href="/userpage">Homepage</a></div>
                             <div class="item">Likes</div>
                             <div class="item">Friends</div>
                         </div>
@@ -234,24 +233,29 @@
                         <p>
                             <% for(var i = 0; i < 5; i++){ %>
                         <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
+                            <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
                         <div class="ui inverted divider"></div>
-                        <% } %>
+                            <% } %>
                         </p>
 
                     </div>
-                    <div>
+
+                    <% }else{ %>
+
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header grid" style="color: green"><i class="massive trophy icon" ></i>Guess You Like</h1>
+                        </div>
+                        <p>
+                            <% for(var i = 1; i < 11; i += 2){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= (i+1)/2 %>. <%= movies[i] %>
+                                 </strong></h2>
+                        <div class="ui inverted divider"></div>
+                            <% } %>
+                        </p>
 
                     </div>
-                    <% }else{ %>
-                    <div class="align-top" style="padding-bottom: 10%">
-                        <h1 class="ui align-top header">Guess You Like</h1>
-                    </div>
-                    <div>
-                        <h2>1. xxxxxxxxxx</h2>
-                        <h2>2. xxxxxxxxxx</h2>
-                        <h2>3. xxxxxxxxxx</h2>
-                    </div>
+
                     <% } %>
 
 
@@ -268,21 +272,23 @@
                         <h2 class="ui header" style="color: #011d37"><strong><%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
                                 <a class="right aligned" href="/rank" style="font-size: large; ">Liked: <%= movies[i]["rating"] %></a> </strong></h2>
                         <div class="ui inverted divider"></div>
-                        <% } %>
+                            <% } %>
                         </p>
 
                     </div>
-                    <div>
 
-                    </div>
                     <% }else{ %>
-                    <div class="align-top" style="padding-bottom: 10%">
-                        <h1 class="ui align-top header">Guess You Like</h1>
-                    </div>
-                    <div>
-                        <h2>1. xxxxxxxxxx</h2>
-                        <h2>2. xxxxxxxxxx</h2>
-                        <h2>3. xxxxxxxxxx</h2>
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header">Guess You Like</h1>
+                        </div>
+                        <p>
+                        <div>
+                            <h2>1. xxxxxxxxxx</h2>
+                            <h2>2. xxxxxxxxxx</h2>
+                            <h2>3. xxxxxxxxxx</h2>
+                        </div>
+                        </p>
                     </div>
                     <% } %>                </div>
             </div>
