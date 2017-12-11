@@ -444,8 +444,8 @@ app.get('/documentary', function(req, res) {
 
 //===========================================================================
 
-app.get('/userpage/:username', function(req, res) {
-    var username = req.params.username;
+app.get('/userpage/:userId', function(req, res) {
+    var username = req.params.userId;
     res.render('userpage');
 });
 
