@@ -58,7 +58,7 @@ app.get("/",function(req, res) {
         userId = sum % 600;
         userId = userId.toString();
         console.log(userId);
-        var path = '/Users/hcwu/Desktop/movie/recom/recom.py';
+        var path = 'recom/recom.py';
 
 
         var spawn = require("child_process").spawn;
