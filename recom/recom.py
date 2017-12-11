@@ -43,8 +43,8 @@ def main():
     # lines = read_in()
 
     # load object
-    prefs_small_load = pickle.load(open('/Users/hcwu/Desktop/movie/recom/prefs_small_rfc.pkl', "rb"))
-    itemsim_small_load = pickle.load(open('/Users/hcwu/Desktop/movie/recom/itemsim_small_rfc.pkl', "rb"))
+    prefs_small_load = pickle.load(open('recom/prefs_small_rfc.pkl', "rb"))
+    itemsim_small_load = pickle.load(open('recom/itemsim_small_rfc.pkl', "rb"))
     data = getRecommendedItems(prefs_small_load, itemsim_small_load, int(sys.argv[1]))[0:10]
     # data = [[1],['1']]
     print(data)

@@ -58,25 +58,12 @@
         </a>
         <a class="active item" href="/">Home</a>
         <a class="item">Movies</a>
-        <div class="ui item inline dropdown">
-            Genre
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <div class="item"><a style="color: inherit" href="/action">Action</a></div>
-                <div class="item"><a style="color: inherit" href="/comedy">Comedy</a></div>
-                <div class="item"><a style="color: inherit" href="/drama">Drama</a></div>
-                <div class="item"><a style="color: inherit" href="/thriller">Thriller</a></div>
-                <div class="item"><a style="color: inherit" href="/crime">Crime</a></div>
-                <div class="item"><a style="color: inherit" href="/horror">Horror</a></div>
-                <div class="item"><a style="color: inherit" href="/romance">Romance</a></div>
-                <div class="item"><a style="color: inherit" href="/documentary">Documentary</a></div>
-            </div>
-        </div>
+        <a class="item">Genre</a>
         <div class="ui item inline dropdown">
             Rank
             <i class="dropdown icon"></i>
             <div class="menu">
-                <div class="item"><a style="color: inherit" href="/rank">All Ratings</a></div>
+                <div class="item"><a style="color: inherit" href="/rank">All</a></div>
                 <div class="item"><a style="color: inherit" href="/imdb">IMDB</a></div>
                 <div class="item"><a style="color: inherit" href="/metacritic">Metacritic</a></div>
                 <div class="item"><a style="color: inherit" href="/rotten_tomatoes">Rotten Tomatoes</a></div>
@@ -93,35 +80,35 @@
 
 
         <% if(!isLogin){ %>
-            <div class="right menu">
-                <div class="item">
-                    <a class="ui inverted red button" href="/login">Log in</a>
-                </div>
-                <div class="item">
-                    <a class="ui inverted red button" href="/register">Sign up</a>
-                </div>
+        <div class="right menu">
+            <div class="item">
+                <a class="ui inverted red button" href="/login">Log in</a>
             </div>
+            <div class="item">
+                <a class="ui inverted red button" href="/register">Sign up</a>
+            </div>
+        </div>
         <% }else{ %>
 
-            <div class="right menu">
-                <div class="ui item inline dropdown inverted button">
-                    <a class="ui inverted red button" >
-                        My Profile
-                        <i class="small dropdown icon" ></i>
-                    </a>
-                    <div class="menu">
-                        <div class="item"><a style="color: inherit" href="/userpage">Homepage</a></div>
-                        <div class="item">Likes</div>
-                        <div class="item">Friends</div>
-                    </div>
-                </div>
-                <!--<div class="item">-->
-                    <!--<a class="ui inverted red button" href="/login">My Homepage</a>-->
-                <!--</div>-->
-                <div class="item">
-                    <a class="ui inverted red button" href="/logout">Sign Out</a>
+        <div class="right menu">
+            <div class="ui item inline dropdown inverted button">
+                <a class="ui inverted red button" >
+                    My Profile
+                    <i class="small dropdown icon" ></i>
+                </a>
+                <div class="menu">
+                    <div class="item"><a style="color: inherit" href="/userpage">Homepage</a></div>
+                    <div class="item">Likes</div>
+                    <div class="item">Friends</div>
                 </div>
             </div>
+            <!--<div class="item">-->
+            <!--<a class="ui inverted red button" href="/login">My Homepage</a>-->
+            <!--</div>-->
+            <div class="item">
+                <a class="ui inverted red button" href="/logout">Sign Out</a>
+            </div>
+        </div>
         <% } %>
 
 
@@ -133,25 +120,12 @@
 <div class="ui sidebar inverted vertical menu">
     <a class="active item">Home</a>
     <a class="item">Movies</a>
-    <div class="ui item inline dropdown">
-        Genre
-        <i class="dropdown icon"></i>
-        <div class="menu">
-            <div class="item"><a style="color: inherit" href="/action">Action</a></div>
-            <div class="item"><a style="color: inherit" href="/comedy">Comedy</a></div>
-            <div class="item"><a style="color: inherit" href="/drama">Drama</a></div>
-            <div class="item"><a style="color: inherit" href="/thriller">Thriller</a></div>
-            <div class="item"><a style="color: inherit" href="/crime">Crime</a></div>
-            <div class="item"><a style="color: inherit" href="/horror">Horror</a></div>
-            <div class="item"><a style="color: inherit" href="/romance">Romance</a></div>
-            <div class="item"><a style="color: inherit" href="/documentary">Documentary</a></div>
-        </div>
-    </div>
+    <a class="item">Genre</a>
     <div class="ui item inline dropdown">
         Rank
         <i class="dropdown icon"></i>
         <div class="menu">
-            <div class="item"><a style="color: inherit" href="/rank">All Ratings</a></div>
+            <div class="item"><a style="color: inherit" href="/rank">All</a></div>
             <div class="item"><a style="color: inherit" href="/imdb">IMDB</a></div>
             <div class="item"><a style="color: inherit" href="/metacritic">Metacritic</a></div>
             <div class="item"><a style="color: inherit" href="/rotten_tomatoes">Rotten Tomatoes</a></div>
@@ -177,25 +151,12 @@
                 </a>
                 <a class="active item">MovieBook</a>
                 <a class="item">Movies</a>
-                <div class="ui item inline dropdown">
-                    Genre
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item"><a style="color: inherit" href="/action">Action</a></div>
-                        <div class="item"><a style="color: inherit" href="/comedy">Comedy</a></div>
-                        <div class="item"><a style="color: inherit" href="/drama">Drama</a></div>
-                        <div class="item"><a style="color: inherit" href="/thriller">Thriller</a></div>
-                        <div class="item"><a style="color: inherit" href="/crime">Crime</a></div>
-                        <div class="item"><a style="color: inherit" href="/horror">Horror</a></div>
-                        <div class="item"><a style="color: inherit" href="/romance">Romance</a></div>
-                        <div class="item"><a style="color: inherit" href="/documentary">Documentary</a></div>
-                    </div>
-                </div>
+                <a class="item">Genre</a>
                 <div class="ui item inline dropdown">
                     Rank
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <div class="item"><a style="color: inherit" href="/rank">All Ratings</a></div>
+                        <div class="item"><a style="color: inherit" href="/rank">All</a></div>
                         <div class="item"><a style="color: inherit" href="/imdb">IMDB</a></div>
                         <div class="item"><a style="color: inherit" href="/metacritic">Metacritic</a></div>
                         <div class="item"><a style="color: inherit" href="/rotten_tomatoes">Rotten Tomatoes</a></div>
@@ -220,8 +181,8 @@
                 <% }else{ %>
                 <div class="right item">
                     <div class="ui inline dropdown inverted button">
-                            My Profile
-                            <i class="small dropdown icon" style="color: inherit"></i>
+                        My Profile
+                        <i class="small dropdown icon" style="color: inherit"></i>
                         <div class="menu">
                             <div class="item"><a style="color: inherit" href="/userpage">Homepage</a></div>
                             <div class="item">Likes</div>
@@ -265,79 +226,79 @@
             <div class="row">
                 <div class="eight wide float-left column" style="padding-left: 10%">
                     <% if(!isLogin){ %>
-                        <div id="rec-top" class="ui inverted segment">
-                            <div class="align-top" style="padding-bottom: 10%">
-                                <h1 class="ui align-top header grid" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
-                            </div>
-                            <p>
-                                <% for(var i = 0; i < 5; i++){ %>
-                                <h2 class="ui header">
-                                    <a  style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
-                                        <%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                    </a>
-                                    <a class="right aligned" href="/rank" style="font-size: large; ">
-                                        Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00
-                                    </a>
-                                </h2>
-                                <div class="ui inverted divider"></div>
-                                <% } %>
-                            </p>
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header grid" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
                         </div>
+                        <p>
+                            <% for(var i = 0; i < 5; i++){ %>
+                        <h2 class="ui header">
+                            <a  style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
+                                <%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                            </a>
+                            <a class="right aligned" href="/rank" style="font-size: large; ">
+                                Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00
+                            </a>
+                        </h2>
+                        <div class="ui inverted divider"></div>
+                        <% } %>
+                        </p>
+                    </div>
 
                     <% }else{ %>
 
-                        <div id="rec-top" class="ui inverted segment">
-                            <div class="align-top" style="padding-bottom: 10%">
-                                <h1 class="ui align-top header grid" style="color: green"><i class="massive trophy icon" ></i>Guess You Like</h1>
-                            </div>
-                            <p>
-                                <% for(var i = 1; i < 11; i += 2){ %>
-                            <h2 class="ui header" style="color: #011d37"><strong><%= (i+1)/2 %>. <%= movies[i] %>
-                                     </strong></h2>
-                            <div class="ui inverted divider"></div>
-                                <% } %>
-                            </p>
-
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header grid" style="color: green"><i class="massive trophy icon" ></i>Guess You Like</h1>
                         </div>
+                        <p>
+                            <% for(var i = 1; i < 11; i += 2){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= (i+1)/2 %>. <%= movies[i] %>
+                            </strong></h2>
+                        <div class="ui inverted divider"></div>
+                        <% } %>
+                        </p>
+
+                    </div>
 
                     <% } %>
                 </div>
                 <div class="eight wide float-right column" style="padding-left: 10%">
                     <% if(!isLogin){ %>
 
-                        <div id="rec-top" class="ui inverted segment">
-                            <div class="align-top" style="padding-bottom: 10%">
-                                <h1 class="ui align-top header grid" style="color: rgb(219, 55, 55)"><i class="large heart icon" ></i>Most Liked </h1>
-                            </div>
-                            <p>
-                                <% for(var i = 5; i < movies.length; i++){ %>
-                                    <h2 class="ui header">
-                                        <a style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
-                                            <%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                        </a>
-                                        <a class="right aligned" href="/rank" style="font-size: large; ">
-                                            Liked: <%= movies[i]["rating"] %>
-                                        </a>
-                                    </h2>
-                                    <div class="ui inverted divider"></div>
-                                <% } %>
-                            </p>
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header grid" style="color: rgb(219, 55, 55)"><i class="large heart icon" ></i>Most Liked </h1>
                         </div>
+                        <p>
+                            <% for(var i = 5; i < movies.length; i++){ %>
+                        <h2 class="ui header">
+                            <a style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
+                                <%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                            </a>
+                            <a class="right aligned" href="/rank" style="font-size: large; ">
+                                Liked: <%= movies[i]["rating"] %>
+                            </a>
+                        </h2>
+                        <div class="ui inverted divider"></div>
+                        <% } %>
+                        </p>
+                    </div>
 
                     <% }else{ %>
 
-                        <div id="rec-top" class="ui inverted segment">
-                            <div class="align-top" style="padding-bottom: 10%">
-                                <h1 class="ui align-top header">Guess You Like</h1>
-                            </div>
-                            <p>
-                                <div>
-                                    <h2>1. xxxxxxxxxx</h2>
-                                    <h2>2. xxxxxxxxxx</h2>
-                                    <h2>3. xxxxxxxxxx</h2>
-                                </div>
-                            </p>
+                    <div id="rec-top" class="ui inverted segment">
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header">Guess You Like</h1>
                         </div>
+                        <p>
+                        <div>
+                            <h2>1. xxxxxxxxxx</h2>
+                            <h2>2. xxxxxxxxxx</h2>
+                            <h2>3. xxxxxxxxxx</h2>
+                        </div>
+                        </p>
+                    </div>
 
                     <% } %>
                 </div>
@@ -360,12 +321,12 @@
         </div>
         <div class="ui equal width stackable internally celled grid">
             <div class="center aligned row">
-                    <div style="position: relative;" class="column">
-                        <a href="/imdb">
+                <div style="position: relative;" class="column">
+                    <a href="/imdb">
                         <!--<img id="IMDb" src="http://static.wixstatic.com/media/8f068a_5c1ba6d94c9f40ee88930cceeaa3a9f2.png">-->
-                            <img height="100" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
-                        </a>
-                    </div>
+                        <img height="100" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
+                    </a>
+                </div>
                 <div style="position: relative;" class="column">
                     <!-- Metacritic -->
                     <a href="/metacritic">

@@ -62,7 +62,7 @@ app.get("/",function(req, res) {
         userId = sum % 600;
         userId = userId.toString();
         console.log(userId);
-        var path = '/Users/hcwu/Desktop/movie/recom/recom.py';
+        var path = 'recom/recom.py';
 
         var spawn = require("child_process").spawn;
         var process = spawn('python',[path, userId]);
@@ -81,10 +81,10 @@ app.get("/",function(req, res) {
 
         //===========   Recommendation   ============
         var query =
-            "(Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
+            "(Select m.title, m.imdbId as id, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
             "From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by rating  DESC Limit 5)\n" +
             "Union All\n" +
-            "(SELECT m.title, COUNT(*) As rating \n" +
+            "(SELECT m.title, m.imdbId as id, COUNT(*) As rating \n" +
             "FROM user_like ul natural JOIN Movie m\n" +
             "WHERE ul.rating > 3\n" +
             "GROUP BY ul.imdbId\n" +
