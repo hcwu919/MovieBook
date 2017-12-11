@@ -83,7 +83,7 @@
 
             <div class="para">
                 <img width="300" height="200"  src="<%= movie["Poster"] %>">
-                <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
+                <p><a href="/movie/<%= movie["imdbID"].substring(4,9) %>"><strong>Name: </strong> <%= movie["Title"] %> </a></p>
                 <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
                 <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
                 <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>

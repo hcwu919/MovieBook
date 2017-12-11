@@ -222,70 +222,76 @@
             </h1>
         </div>
         <div class="ui middle aligned stackable grid container">
+
+
             <div class="row">
                 <div class="eight wide float-left column" style="padding-left: 10%">
-
                     <% if(!isLogin){ %>
-
-                    <div id="rec-top" class="ui inverted segment">
-                        <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header grid" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
+                        <div id="rec-top" class="ui inverted segment">
+                            <div class="align-top" style="padding-bottom: 10%">
+                                <h1 class="ui align-top header grid" style="color: gold"><i class="massive trophy icon" ></i>Top Rated </h1>
+                            </div>
+                            <p>
+                                <% for(var i = 0; i < 5; i++){ %>
+                                <h2 class="ui header">
+                                    <a  style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
+                                        <%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                                    </a>
+                                    <a class="right aligned" href="/rank" style="font-size: large; ">
+                                        Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00
+                                    </a>
+                                </h2>
+                                <div class="ui inverted divider"></div>
+                                <% } %>
+                            </p>
                         </div>
-                        <p>
-                            <% for(var i = 0; i < 5; i++){ %>
-                        <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                <a class="right aligned" href="/rank" style="font-size: large; ">Rate: <%= movies[i]["rating"].toString().substring(0, 4) %>/10.00</a> </strong></h2>
-                        <div class="ui inverted divider"></div>
-                        <% } %>
-                        </p>
-
-                    </div>
-                    <div>
-
-                    </div>
                     <% }else{ %>
-                    <div class="align-top" style="padding-bottom: 10%">
-                        <h1 class="ui align-top header">Guess You Like</h1>
-                    </div>
-                    <div>
-                        <h2>1. xxxxxxxxxx</h2>
-                        <h2>2. xxxxxxxxxx</h2>
-                        <h2>3. xxxxxxxxxx</h2>
-                    </div>
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header">Guess You Like</h1>
+                        </div>
+                        <div>
+                            <h2>1. xxxxxxxxxx</h2>
+                            <h2>2. xxxxxxxxxx</h2>
+                            <h2>3. xxxxxxxxxx</h2>
+                        </div>
                     <% } %>
-
-
                 </div>
                 <div class="eight wide float-right column" style="padding-left: 10%">
                     <% if(!isLogin){ %>
 
-                    <div id="rec-top" class="ui inverted segment">
-                        <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header grid" style="color: rgb(219, 39, 39)"><i class="large heart icon" ></i>Most Liked </h1>
+                        <div id="rec-top" class="ui inverted segment">
+                            <div class="align-top" style="padding-bottom: 10%">
+                                <h1 class="ui align-top header grid" style="color: rgb(219, 55, 55)"><i class="large heart icon" ></i>Most Liked </h1>
+                            </div>
+                            <p>
+                                <% for(var i = 5; i < movies.length; i++){ %>
+                                <h2 class="ui header">
+                                <a style="color: #011d37" href="/movie/<%= movies[i]["id"] %>">
+                                        <%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                                    </a>
+                                    <a class="right aligned" href="/rank" style="font-size: large; ">
+                                        Liked: <%= movies[i]["rating"] %>
+                                    </a>
+                                </h2>
+                                <div class="ui inverted divider"></div>
+                            <% } %>
+                            </p>
                         </div>
-                        <p>
-                            <% for(var i = 5; i < movies.length; i++){ %>
-                        <h2 class="ui header" style="color: #011d37"><strong><%= i-4 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
-                                <a class="right aligned" href="/rank" style="font-size: large; ">Liked: <%= movies[i]["rating"] %></a> </strong></h2>
-                        <div class="ui inverted divider"></div>
-                        <% } %>
-                        </p>
 
-                    </div>
-                    <div>
-
-                    </div>
                     <% }else{ %>
-                    <div class="align-top" style="padding-bottom: 10%">
-                        <h1 class="ui align-top header">Guess You Like</h1>
-                    </div>
-                    <div>
-                        <h2>1. xxxxxxxxxx</h2>
-                        <h2>2. xxxxxxxxxx</h2>
-                        <h2>3. xxxxxxxxxx</h2>
-                    </div>
-                    <% } %>                </div>
+                        <div class="align-top" style="padding-bottom: 10%">
+                            <h1 class="ui align-top header">Guess You Like</h1>
+                        </div>
+                        <div>
+                            <h2>1. xxxxxxxxxx</h2>
+                            <h2>2. xxxxxxxxxx</h2>
+                            <h2>3. xxxxxxxxxx</h2>
+                        </div>
+                    <% } %>
+                </div>
             </div>
+
+
             <div class="row">
                 <div id="sym" class="center aligned column">
                     <a class="ui huge button" href="/search">Search Other Movies </a>

@@ -1,238 +1,25 @@
-<!-- views/index.ejs -->
-<!doctype html>
 <html>
-<head>
-    <title>Minion Movies</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
-    <link rel="stylesheet" href="stylesheets/bootstrap.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <style>
-        body    { padding-top: 50px; }
-
-        .well {
-            padding-bottom: 50px;
-        }
-
-        .play {
-            margin-left: 50px;
-        }
-    </style>
-</head>
+<head>movie page</head>
 <body>
-<nav class="navbar navbar-default">
+<div class="para">
+    <img width="300" height="200"  src="<%= movie["Poster"] %>">
+    <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
+    <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
+    <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
+    <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>
+    <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>
+    <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>
+    <p> <strong>Director: </strong> <%= movie["Director"] %> </p>
+    <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>
+    <p> <strong>Country: </strong> <%= movie["Country"] %> </p>
+    <p> <strong>Language: </strong> <%= movie["Language"] %> </p>
+    <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>
+    <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>
 
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Minion Movies</a>
-        </div>
+    <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>
+    <p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/ "> Movies <span class="sr-only">(current)</span></a></li>
-                <li><a href="/artists"> Artists </a></li>
-                <li><a href="/reviews"> Reviews </a></li>
-                <li><a href="/categories"> Categories </a></li>
-                <li><a href="/trailers"> Trailers </a></li>
-            </ul>
-
-            <form action='/result' method="post" class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="form-control" size="20" placeholder="Search movies or people here" name="searchContent">
-                </div>
-                <select name="searchType" size="1">
-                    <option value="title" selected> title </option>
-                    <option value="actors"> actors </option>
-                    <option value="country"> country </option>
-                    <option value="tag"> tag </option>
-                    <option value="year"> year </option>
-                    <option value="genres"> genres </option>
-                </select>
-                <button type="submit" class="btn btn-default">Search</button>
-            </form>
-            <% if(!isLogin){ %>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Log in <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/auth/facebook"><span class="fa fa-facebook"></span> Facebook </a></li>
-                    </ul>
-                </li>
-            </ul>
-            <% }else{ %>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Profile <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/profile"><span class="fa fa-user"></span> My Profile </a></li>
-                        <li><a href="/likedMovies"><span class="fa fa-tv"></span> My Movie </a></li>
-                        <li><a href="/logout"><span class="fa fa-facebook"></span> Log out </a></li>
-                    </ul>
-                </li>
-            </ul>
-            <% } %>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Bing <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <form method ="post" id ="bingSearchForm" action ="/bing" class="navbar-form navbar-left" role="search">
-                            <div class="form-group">
-                                <input type="search"  results= "s" class="form-control" size="20" placeHolder = "  Bing! Search" name="bingSearchContent"/>
-                            </div>
-                        </form>
-                    </ul>
-                </li>
-            </ul>
-
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-<!-- Reviews: every div shows one review tuple -->
-<div class="container">
-    <div class="well">
-        <h1><i class="fa fa-circle"></i> <%= movies["TITLE_YEAR"] %></h1>
-        <span class="image">
-            <img class="poster" src = <%= movies["POSTER"] %> alt = <%= movies["TITLE_YEAR"] %>/>
-            <p><strong>Name: </strong> <%= movies["TITLE_YEAR"] %></p>
-            <p><strong>Director: </strong> <%= directors %></p>
-            <p><strong>Cast:</strong>
-                <% if(actors.length > 0){ %>
-                <% for(var i = 0;i < actors.length;i++){ %>
-                <% var artistLink = "/artists/" + actors[i]["PERSON_ID"] %>
-                &nbsp;<a href=<%= artistLink %>> <%= actors[i]["NAME"] %>(<%= actors[i]["CHARACTER"] %>) </a>&nbsp;|
-                <% } %>
-                <% }else{ %>
-                No information found.
-                <% } %>
-            </p>
-
-            <p><strong>Release date: </strong> <%= movies["RELEASE_DATE"] %></p>
-            <p><strong>Runtime: </strong> <%= movies["RUNTIME"] %> mins</p>
-            <p><strong>Countries/Languages: </strong> <%= trailers[0]["COUNTRIES"]%> </p>
-            <p><strong>Genres: </strong> <%= genres %></p>
-            <p><strong>MPAA: </strong> <%= movies["MPAA"] %></p>
-            <p><strong>Popularity: </strong> <%= movies["POPULARITY"] %>(people like)</p>
-            <p><strong>Rating: </strong> <%= movies["TMDB_RATING"] %>/10(TMDB) | <%= movies["MOVIELEN_RATING"] %>/5(Movie Len) | <%= movies["RT_CRITIC_RATING"] %>/100(Rotten tomatoes' Critics) | <%= movies["RT_AUDIENCE_RATING"] %>/100(Rotten tomatoes' audience) </p>
-            <p><strong>Tag(<%= movies["TAG_NUM"] %>): </strong> <%= tags%> </p>
-            <p><strong>Overview: </strong><%= movies["OVERVIEW"] %></p>
-
-            <% var imdbLink = "http://www.imdb.com/title/tt" + movies["MOVIE_ID"] %>
-            <p><a href=<%= imdbLink %>> <strong> More details... </strong> </a></p>
-            <% var likeLink = "/like/"+movies["MOVIE_ID"] %>
-            <% var cancelLikeLink = "/cancelLike/"+movies["MOVIE_ID"] %>
-            <% if(isLogin){ %>
-            <% if(!like){ %>
-            <a href=<%= likeLink %>><button class="btn btn-danger bt-xs"><span class="fa fa-thumbs-up"></span> Like </button></a>
-            <% }else{ %>
-            <a href=<%= cancelLikeLink %>><button class="btn btn-info bt-xs"><span class="fa fa-thumbs-up"></span> You've liked this movie </button></a>
-            <% } %>
-            <% } %>
-        </span>
-    </div>
-
-    <div class="well">
-        <a href="/trailers">
-            <button class="btn btn-danger bt-xs"><h3><i class="fa fa-youtube"></i> Trailer </h3></button>
-        </a>
-        <p class="play">
-            <% if(!(trailers[0]["POSTER"] == 'null')){ %>
-            <img class="trailer_poster" src = <%= trailers[0]["POSTER"] %> />
-            <% } %>
-            <% for(var i = 0; i < trailers.length; i++){ %>
-            <% if(trailers[i]["TRAILER"] != "null"){ %>
-            <span class="fa fa-youtube-play fa-2x play"></span>
-            <a href=<%= trailers[i]["TRAILER"] %>> Play <%= i + 1 %> </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <% }else{ %> <strong>No trailer for this movie... </strong> <% } %>
-            <% } %>
-        </p>
-    </div>
-
-    <div class="well">
-        <p><button class="btn btn-warning bt-xs"><h3><span class="fa fa-thumbs-up"></span> You may like: </h3></button></p>
-        <% for(var i = 0; i < rec1.length; i++){ %>
-        <% var id = rec1[i]["MOVIE_ID"]%>
-        <% var link = "/movies/" + rec1[i]["MOVIE_ID"] %>
-        <span class="image">
-            <a href = <%= link %>>
-              <img src = <%= rec1[i]["POSTER"] %> alt = <%= rec1[i]["TITLE_YEAR"] %> />
-            </a>
-            <a href = <%= link %> class="link"><%= rec1[i]["TITLE_YEAR"] %></a>
-          </span>
-        <% } %>
-    </div>
-
-    <div class="well">
-        <a href='/reviews'><button class="btn btn-info bt-xs"><h3><span class="fa fa-comments"></span> Review </h3></button></a>
-        <br></br>
-        <% for(var i = 0; i < reviews.length; i++){ %>
-        <% if(reviews[i]["QUOTE"] && reviews[i]["CRITIC"]){ %>
-        <p><strong><%= reviews[i]["PUBLICATION"] %> </strong> (<%= reviews[i]["PUBLISH_DATE"]%>): </p>
-        <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <%= reviews[i]["QUOTE"] %>
-            <% if(reviews[i]["LINK"] != ""){ %>
-            <a href=<%= reviews[i]["LINK"] %>><strong>(View complete review)</strong></a>
-            <% } %>
-            <% if(reviews[i]["CRITIC"]){ %>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<%= reviews[i]["CRITIC"] %>
-            <% } %>
-        </p>
-        <% } %>
-        <% } %>
-    </div>
-
-    <!-- comment -->
-    <% if(isLogin){ %>
-
-    <div class="well">
-        <p><button class="btn btn-primary bt-lg"><span class="fa fa-comments"></span> Monion reviews: </button></p>
-        <% for(var i = 0; i < minionReviews.length; i++){ %>
-        <table class = "table">
-            <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <% var userLink = '/user/' + minionReviews[i]["uid"] %>
-                    <p><strong><span class="fa fa-user"></span> <a href=<%= userLink %>><%= minionReviews[i]["uname"] %></a> commented on <%= minionReviews[i]["date"] %>: </strong></p>
-                    <br>
-                    <%= minionReviews[i]["review"] %>
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <% } %>
-    </div>
-
-
-    <div class="well">
-        <table class = "table">
-            <tr>
-                <td>
-                    <% var reviewLink = "/userReview/" + movies["MOVIE_ID"] %>
-                    <form action=<%= reviewLink %> method="post">
-                        <textarea type="text" class="form-control" placeholder="Put down what you think about this movie here..." name="review" rows="3" ></textarea>
-                        <p></p>
-                        <button type="submit" class="btn btn-warning"> Comment </button>
-                    </form>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <% } %>
+    <p><a href="/movie/reviews/<%= id %>">See reviews</a></p>
 </div>
-<script src="../../js/bootstrap.min.js"></script>
-<script src="../../js/jquery.js"></script>
-<script src="../../js/bootstrap.js"></script>
 </body>
 </html>
