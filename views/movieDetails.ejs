@@ -1,26 +1,36 @@
 <html>
-<head>movie page</head>
 <body>
+
 <div class="para">
-    < img width="300" height="200"  src="<%= movie["Poster"] %>">
-    <p> <strong>Name: </strong> <%= movie["Title"] %> </p >
-    <p> <strong>Year: </strong> <%= movie["Year"] %> </p >
-    <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p >
-    <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p >
-    <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p >
-    <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p >
-    <p> <strong>Director: </strong> <%= movie["Director"] %> </p >
-    <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p >
-    <p> <strong>Country: </strong> <%= movie["Country"] %> </p >
-    <p> <strong>Language: </strong> <%= movie["Language"] %> </p >
-    <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p >
-    <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p >
+    <img width="300" height="200"  src="<%= movie["Poster"] %>">
+    <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
+    <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
+    <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
+    <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>
+    <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>
+    <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>
+    <p> <strong>Director: </strong> <%= movie["Director"] %> </p>
+    <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>
+    <p> <strong>Country: </strong> <%= movie["Country"] %> </p>
+    <p> <strong>Language: </strong> <%= movie["Language"] %> </p>
+    <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>
+    <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>
 
-    <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p >
-    <p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p >
+    <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>
+    <p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p>
+    <strong>Reviews:</strong>
 
-    <p><a href=" >">See reviews</a ></p >
-    <p><a href="/">back to home</a ></p >
+    <% if(reviews[0] === undefined) { %>
+        <p>No reviews currently</p>
+    <% } else { %>
+        <% reviews[0]["review"].split('.,').forEach(function (comment) { %>
+            <p> <%= comment.split("<br /><br />").join("\n"); %> <p>
+        <% }) %>
+    <% } %>
+
+    <p><a href="/movie/reviews/<%= id %>">See reviews</a></p>
+    <p><a href="/">back to home</a></p>
+
 </div>
 </body>
 </html>

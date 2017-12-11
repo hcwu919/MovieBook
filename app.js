@@ -118,7 +118,7 @@ app.post('/result', function(req, res) {
     console.log(content);
     var query;
     if(type==="title") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE m.title LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -130,7 +130,7 @@ app.post('/result', function(req, res) {
         });
     }
     if(type==="actors") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.actor_1_name LIKE '%" + content + "%' OR d.actor_2_name " +
@@ -141,7 +141,7 @@ app.post('/result', function(req, res) {
         });
     }
     if(type==="country") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.country LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -151,7 +151,7 @@ app.post('/result', function(req, res) {
         });
     }
     if(type==="year") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.title_year LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -161,7 +161,7 @@ app.post('/result', function(req, res) {
         });
     }
     if(type==="genres") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE g.genres LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -213,7 +213,14 @@ app.get('/movie/:id', function(req, res) {
             var data = JSON.parse(body);
             console.log(data);
             console.log(req.params.id);
-            res.render('movieDetails', {id: req.params.id, movie: data})
+            review.find({'imdbID':Number(req.params.id)}, function (err, result) {
+                if(err) throw err;
+                console.log(typeof reviews);
+                var reviews = JSON.stringify(result);
+                reviews = JSON.parse(reviews);
+                res.render('movieDetails',{id:req.params.id, reviews:reviews, movie: data});
+            });
+            // res.render('movieDetails', {id: req.params.id, movie: data})
         }
     });
 });
@@ -306,7 +313,7 @@ function isLoggedIn(res, req, next) {
 // ==================================== Rank List ============================================
 // imdb rank
 app.get('/imdb', function (req, res) {
-    query = "Select distinct M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct m.imdbId as id, M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.IMDB Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -317,7 +324,7 @@ app.get('/imdb', function (req, res) {
 
 // metacritic rank
 app.get('/metacritic', function (req, res) {
-    query = "Select distinct M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct m.imdbId as id, M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.Metacritic Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -328,7 +335,7 @@ app.get('/metacritic', function (req, res) {
 
 // rotten tomatoes rank
 app.get('/rotten_tomatoes', function (req, res) {
-    query = "Select distinct M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct m.imdbId as id, M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.RottenTomatoes Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -339,7 +346,7 @@ app.get('/rotten_tomatoes', function (req, res) {
 
 // fadango rank
 app.get('/fandango', function (req, res) {
-    query = "Select distinct M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
+    query = "Select distinct m.imdbId as id, M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
@@ -349,7 +356,7 @@ app.get('/fandango', function (req, res) {
 
 // rank of all
 app.get('/rank', function (req, res) {
-    query = "Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
+    query = "Select distinct m.imdbId as id, m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
         ")/4 AS avg_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -363,7 +370,7 @@ app.get('/rank', function (req, res) {
 // ================== Genres ============================================
 
 app.get('/action', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Action' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -373,7 +380,7 @@ app.get('/action', function(req, res) {
 });
 
 app.get('/comedy', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Comedy' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -383,7 +390,7 @@ app.get('/comedy', function(req, res) {
 });
 
 app.get('/drama', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Drama' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -393,7 +400,7 @@ app.get('/drama', function(req, res) {
 });
 
 app.get('/thriller', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Thriller' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -403,7 +410,7 @@ app.get('/thriller', function(req, res) {
 });
 
 app.get('/crime', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Crime' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -413,7 +420,7 @@ app.get('/crime', function(req, res) {
 });
 
 app.get('/horror', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Horror' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -423,7 +430,7 @@ app.get('/horror', function(req, res) {
 });
 
 app.get('/romance', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Romance' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
@@ -433,7 +440,7 @@ app.get('/romance', function(req, res) {
 });
 
 app.get('/documentary', function(req, res) {
-    query = "Select distinct g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
         "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Documentary' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
