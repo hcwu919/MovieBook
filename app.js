@@ -17,14 +17,14 @@ var connection = mysql.createConnection({
 // var http = require('http');
 
 
-
 connection.connect();
-mongoose.connect("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
+mongoose.createConnection("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
 app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
     saveUninitialized : false
 }));
+
 
 // var server = http.createServer(app);
 app.set('views',__dirname + '/views');
@@ -37,9 +37,6 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-
-
 
 
 //=================================== Home ==================================
@@ -454,7 +451,8 @@ app.get('/documentary', function(req, res) {
 
 //===========================================================================
 
-app.get('/userpage', function(req, res) {
+app.get('/userpage/:userId', function(req, res) {
+    var username = req.params.userId;
     res.render('userpage');
 });
 
