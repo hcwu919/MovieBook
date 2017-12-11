@@ -6,6 +6,7 @@ var request = require("request");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var User = require("./models/user");
+var review = require("./models/reviews");
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'database2017.c7dghyf3qfms.us-west-2.rds.amazonaws.com',
@@ -18,7 +19,7 @@ var connection = mysql.createConnection({
 
 
 connection.connect();
-mongoose.createConnection("mongodb://localhost/users");
+mongoose.connect("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
 app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
@@ -39,6 +40,9 @@ passport.deserializeUser(User.deserializeUser());
 
 
 
+
+
+//=================================== Home ==================================
 // homepage
 app.get("/",function(req, res) {
     // =========  log in ? ==============
@@ -60,7 +64,6 @@ app.get("/",function(req, res) {
         console.log(userId);
         var path = 'recom/recom.py';
 
-
         var spawn = require("child_process").spawn;
         var process = spawn('python',[path, userId]);
 
@@ -78,10 +81,10 @@ app.get("/",function(req, res) {
 
         //===========   Recommendation   ============
         var query =
-            "(Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
+            "(Select m.title, m.imdbId as id, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
             "From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by rating  DESC Limit 5)\n" +
             "Union All\n" +
-            "(SELECT m.title, COUNT(*) As rating \n" +
+            "(SELECT m.title, m.imdbId as id, COUNT(*) As rating \n" +
             "FROM user_like ul natural JOIN Movie m\n" +
             "WHERE ul.rating > 3\n" +
             "GROUP BY ul.imdbId\n" +
@@ -177,9 +180,8 @@ app.post('/result', function(req, res) {
 app.post("/apisearch", function (req, res) {
     var content = req.body.searchContent;
     console.log(content);
-    // content = content.split("").join("''");
-    var type = req.body.searchType;
-    var url = "http://www.omdbapi.com/?i=tt3896198&apikey=b5cf18e9&t="+content;
+    var url = "http://www.omdbapi.com/?apikey=b5cf18e9&t="+content;
+    console.log(url);
     request(url,function (error, response, body) {
         console.log(JSON.parse(body));
         if (error) {
@@ -193,19 +195,57 @@ app.post("/apisearch", function (req, res) {
 });
 
 
+// ===================================  Movie ====================================
+
 app.get("/movie", function(req, res) {
     res.render("movie");
 });
 
 
 // movie details
-app.get('/movieDetails', function(req, res) {
+app.get('/movie/:id', function(req, res) {
     var mid = req.params.id;
-    console.log(mid);
-    res.render('movieDetails');
+    var pad = "0000000";
+    mid = pad.substring(0, pad.length - mid.length) + mid;
+    var url = "http://www.omdbapi.com/?apikey=b5cf18e9&i=tt"+mid;
+    console.log("url: "+url);
+    request(url,function (error, response, body) {
+        if (error) {
+            throw error;
+        } else {
+            var data = JSON.parse(body);
+            console.log(data);
+            console.log(req.params.id);
+            res.render('movieDetails', {id: req.params.id, movie: data})
+        }
+    });
+});
+
+app.get('/movie/reviews/:id', function (req, res) {
+    console.log(req.params.id);
+    review.find({'imdbID':Number(req.params.id)},function (err, reviews) {
+        if(err) throw err;
+        console.log(reviews);
+        res.render('reviews',{id:req.params.id, reviews:reviews});
+        // res.render('reviews',{reviews:reviews});
+    });
+
+
+    // review.find({imdbID:req.params.id},function (err, reviewSet) {
+    //     if (err) {
+    //         throw err;
+    //     } else {
+    //         console.log("success");
+    //         console.log(reviewSet);
+    //         res.render("reviews",{review: reviewSet});
+    //     }
+    // });
 });
 
 //==============================================================================
+
+
+
 
 
 // ============================== AUTH ROUT =====================================
@@ -266,7 +306,7 @@ function isLoggedIn(res, req, next) {
 
 // =======================================================================
 
-// ================== Rank List ============================================
+// ==================================== Rank List ============================================
 // imdb rank
 app.get('/imdb', function (req, res) {
     query = "Select distinct M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +

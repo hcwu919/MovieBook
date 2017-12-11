@@ -1,25 +1,7 @@
-<!-- views/index.ejs -->
-<!doctype html>
 <html>
-<head>
-    <title>Minion Movies</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
-    <link rel="stylesheet" href="stylesheets/bootstrap.css">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <style>
-        body    { padding-top: 50px; }
-
-        .well {
-            padding-bottom: 50px;
-        }
-
-        .play {
-            margin-left: 50px;
-        }
-    </style>
-</head>
+<head>movie page</head>
 <body>
+<<<<<<< HEAD
 <nav class="navbar navbar-default">
 
     <div class="container-fluid">
@@ -145,7 +127,6 @@
             <% if(trailers[i]["TRAILER"] != "null"){ %>
             <span class="fa fa-youtube-play fa-2x play"></span>
             <a href=<%= trailers[i]["TRAILER"] %>> Play <%= i + 1 %> </a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <% }else{ %> <strong>No trailer for this movie... </strong> <% } %>
             <% } %>
         </p>
@@ -172,13 +153,12 @@
         <% if(reviews[i]["QUOTE"] && reviews[i]["CRITIC"]){ %>
         <p><strong><%= reviews[i]["PUBLICATION"] %> </strong> (<%= reviews[i]["PUBLISH_DATE"]%>): </p>
         <p>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <%= reviews[i]["QUOTE"] %>
             <% if(reviews[i]["LINK"] != ""){ %>
             <a href=<%= reviews[i]["LINK"] %>><strong>(View complete review)</strong></a>
             <% } %>
             <% if(reviews[i]["CRITIC"]){ %>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------<%= reviews[i]["CRITIC"] %>
+            ------<%= reviews[i]["CRITIC"] %>
             <% } %>
         </p>
         <% } %>
@@ -230,9 +210,27 @@
         </table>
     </div>
     <% } %>
+
+<div class="para">
+    <img width="300" height="200"  src="<%= movie["Poster"] %>">
+    <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
+    <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
+    <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
+    <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>
+    <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>
+    <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>
+    <p> <strong>Director: </strong> <%= movie["Director"] %> </p>
+    <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>
+    <p> <strong>Country: </strong> <%= movie["Country"] %> </p>
+    <p> <strong>Language: </strong> <%= movie["Language"] %> </p>
+    <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>
+    <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>
+
+    <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>
+    <p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p>
+
+    <p><a href="/movie/reviews/<%= id %>">See reviews</a></p>
+    <p><a href="/">back to homepage</a></p>
 </div>
-<script src="../../js/bootstrap.min.js"></script>
-<script src="../../js/jquery.js"></script>
-<script src="../../js/bootstrap.js"></script>
 </body>
 </html>
