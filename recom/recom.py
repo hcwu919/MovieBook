@@ -3,13 +3,15 @@
 import pickle
 import sys, json
 
+# dataToSendBack = [[1],['1']]
+# print(dataToSendBack)
+# sys.stdout.flush()
+
 #Read data from stdin
 def read_in():
     lines = sys.stdin.readlines()
     #Since our input would only be having one line, parse our JSON data from that
     return json.loads(lines[0])
-
-
 
 def getRecommendedItems(prefs, itemMatch, user):
     userRatings = prefs[user]
@@ -32,21 +34,26 @@ def getRecommendedItems(prefs, itemMatch, user):
     rankings = [[score / totalSim[item], item] for (item, score) in
                 scores.items()]
     # Return the rankings from highest to lowest
-    rankings.sort()
+    rankings.sort(key= lambda x: (x[0], int(x[1][-5:-1])))
     rankings.reverse()
+    rankings = ['|'+item+'|' for (score, item) in rankings]
     return rankings
 
 def main():
-    lines = read_in()
+    # lines = read_in()
 
     # load object
-    prefs_small_load = pickle.load(open('prefs_small_rfc.pkl', "rb"))
-    itemsim_small_load = pickle.load(open('itemsim_small_rfc.pkl', "rb"))
-
-    return getRecommendedItems(prefs_small_load, itemsim_small_load, lines)[0:10]
+    prefs_small_load = pickle.load(open('/Users/hcwu/Desktop/movie/recom/prefs_small_rfc.pkl', "rb"))
+    itemsim_small_load = pickle.load(open('/Users/hcwu/Desktop/movie/recom/itemsim_small_rfc.pkl', "rb"))
+    data = getRecommendedItems(prefs_small_load, itemsim_small_load, int(sys.argv[1]))[0:10]
+    # data = [[1],['1']]
+    print(data)
+    sys.stdout.flush()
+    # return data
 # [[ , title, ],
 #  [],
 #  ...]
+
 
 #start process
 if __name__ == '__main__':

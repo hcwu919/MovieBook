@@ -48,34 +48,56 @@ app.get("/",function(req, res) {
     // =========  log in ? ==============
     var isLogin = false;
     console.log(JSON.stringify(req.user));
-    var username = req.user;
+    var user = req.user;
     // var username = data["username"];
     if (req.isAuthenticated()) {
         isLogin = true;
-        username = JSON.stringify(username);
-        username = JSON.parse(username)["username"];
-        
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+        console.log(userId);
+        var path = '/Users/hcwu/Desktop/movie/recom/recom.py';
+
+        var spawn = require("child_process").spawn;
+        var process = spawn('python',[path, userId]);
+
+        process.stdout.on('data', function (data){
+            var movies = data.toString().split('|');
+            // movies[0] = movies[0].substring(2, movies[0].length);
+            // if(err) throw err;
+            console.log(data.toString());
+            console.log(movies);
+            res.render('homepage', {movies: movies, isLogin: isLogin, username: username});
+        });
+
+    } else {
+        console.log("isLogin = ", isLogin, "username = ", username);
+
+        //===========   Recommendation   ============
+        var query =
+            "(Select m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
+            "From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by rating  DESC Limit 5)\n" +
+            "Union All\n" +
+            "(SELECT m.title, COUNT(*) As rating \n" +
+            "FROM user_like ul natural JOIN Movie m\n" +
+            "WHERE ul.rating > 3\n" +
+            "GROUP BY ul.imdbId\n" +
+            "ORDER BY rating  DESC\n" +
+            "Limit 3, 5)";
+
+
+        connection.query(query, function (err, movies) {
+            if (err) throw err;
+            console.log(JSON.stringify(movies));
+            res.render('homepage', {movies: movies, isLogin : isLogin, username: username});
+        });
     }
-    console.log("isLogin = ", isLogin, "username = ", username);
-
-    //===========   Recommendation   ============
-    var query =
-        "(Select m.title, m.imdbId as id, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 )/4 AS rating \n" +
-        "From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by rating  DESC Limit 5)\n" +
-        "Union All\n" +
-        "(SELECT m.title, m.imdbId as id, COUNT(*) As rating \n" +
-        "FROM user_like ul natural JOIN Movie m\n" +
-        "WHERE ul.rating > 3\n" +
-        "GROUP BY ul.imdbId\n" +
-        "ORDER BY rating  DESC\n" +
-        "Limit 3, 5)";
-
-
-    connection.query(query, function (err, movies) {
-        if (err) throw err;
-        console.log(JSON.stringify(movies));
-        res.render('homepage', {movies: movies, isLogin : isLogin, username: username});
-    });
 });
 
 
@@ -340,11 +362,14 @@ app.get('/rank', function (req, res) {
 });
 //===========================================================================
 
+app.get('/userpage', function(req, res) {
+    res.render('userpage');
+});
 
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
-})
+});
 
 // server.listen(app.get('port'), function(){
 //     console.log('Express server listening on port ' + app.get('port'));
