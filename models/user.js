@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 var passportLocalMongoose = require("passport-local-mongoose");
 
-mongoose.connect("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review");
+mongoose.createConnection("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review");
 
 var UserSchema = new mongoose.Schema({
     username : String,
