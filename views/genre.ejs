@@ -1,0 +1,119 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>MovieBook rank</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
+    <link rel="stylesheet" href="../../stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="../../stylesheets/style.css">
+    <style>
+        body    { padding-top: 80px; }
+
+        .review > div {
+            display: inline-block;
+        }
+
+        .para {
+            text-align: left;
+            margin-left: 120px;
+        }
+
+        a > button {
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">MovieBook</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" >
+                <li class="active"><a href="/"> Movies <span class="sr-only">(current)</span></a></li>
+                <li><a href="/artists"> Artists </a></li>
+                <li><a href="/reviews"> Reviews </a></li>
+                <li><a href="/categories"> Categories </a></li>
+                <li><a href="/rank"> Rank </a></li>
+            </ul>
+            <form action='/result' method="post" class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" size="30" placeholder="Search movies or people here" name="searchContent">
+                </div>
+                <select name="searchType" size="1">
+                    <option value="title" selected> title </option>
+                    <option value="actors"> actors </option>
+                    <option value="country"> country </option>
+                    <option value="year"> year </option>
+                    <option value="genres"> genres </option>
+                </select>
+                <button type="submit" class="btn btn-default">Search</button>
+            </form>
+            <form action='/apisearch' method="post" class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" size="30" placeholder="Search movie details" name="searchContent">
+                </div>
+                <select name="searchType" size="1">
+                    <option value="title" selected> title </option>
+                    <option value="actors"> actors </option>
+                    <option value="country"> country </option>
+                    <option value="year"> year </option>
+                    <option value="genres"> genres </option>
+                </select>
+                <button type="submit" class="btn btn-default">Search</button>
+            </form>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div id="rankinglist" class="ui center aligned text container">
+    <div class="row">
+        <a href="/rank">
+            <img height="30%" width="10%" src="http://www.shejiye.com/uploadfile/icon/2017/0203/shejiyeiconehw5v1s4pec.png">
+        </a>
+        <a href="/imdb">
+            <img height="90" width="30%" src="http://pop-verse.com/wp-content/uploads/2013/04/IMDb.png">
+        </a>
+        <a href="/metacritic">
+            <img height="37" width="350" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Metacritic_logo.svg/2000px-Metacritic_logo.svg.png">
+        </a>
+        <a href="/rotten_tomatoes">
+            <img height="110" width="35%" src="http://www.userlogos.org/files/logos/jumpordie/rottentomatoes_01.png">
+        </a>
+        <a href="/fandango">
+            <img height="76" width="40%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Fandango_2014.svg/1200px-Fandango_2014.svg.png">
+        </a>
+    </div>
+
+</div>
+
+<% for(var i = 0; i < movies.length; i++){ %>
+<div class="container">
+    <div class="well">
+        <div class="review">
+            <!--Name(title), Year(title_year), Duration(duration), Genre(genres), Actors(actor_1_name, -->
+            <!--actor_2_name, actor_3_name), Country(country), Ratings, IMDB(movie_imdb_link)-->
+            <div class="para">
+                <p> <strong>Name: </strong> <%= movies[i]["Title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </p>
+                <p> <strong>Genre: </strong> <%= movies[i]["genres"] %> </p>
+                <p> <li> Average Rate: <%= movies[i]["Avr_rate"].toString().substring(0, 4) %>/10.0 </li> </p>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/jquery.js"></script>
+<script src="../../js/bootstrap.js"></script>
+</body>
+</html>
+
+
