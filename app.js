@@ -70,7 +70,7 @@ app.get("/",function(req, res) {
             // if(err) throw err;
             console.log(data.toString());
             console.log(movies);
-            res.render('homepage', {movies: movies, isLogin: isLogin, username: username});
+            res.render('homepage', {movies: movies, isLogin: isLogin, username: username, userId: userId});
         });
 
     } else {
