@@ -469,8 +469,6 @@ app.get('/userpage/:userId', function(req, res) {
 
 
 
-
-
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
 });
