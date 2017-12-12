@@ -1,2 +1,2 @@
-*.JavaScript linguist-language=go
-*.HTML linguist-language=go
+*.js linguist-language=JavaScript
+*.ejs linguist-language=HTML
