@@ -461,10 +461,24 @@ app.get('/documentary', function(req, res) {
 
 //===========================================================================
 
+//=============================== User Page ============================================
 app.get('/userpage/:userId', function(req, res) {
-    var username = req.params.userId;
-    res.render('userpage');
+    var id = req.params.userId;
+    console.log(id);
+    query = "SELECT DISTINCT u.userId\n" +
+        "FROM user_like ul JOIN User u ON ul.User_ID = u.userId\n" +
+        "WHERE ul.User_ID NOT IN (\n" +
+        "SELECT User_ID FROM user_like WHERE imdbId NOT IN \n" +
+        "(SELECT imdbId FROM user_like WHERE User_ID = '" + id + "') AND ul.User_ID != '" + id + "')\n";
+    connection.query(query, function (err, movies) {
+        if(err) throw err;
+        console.log(JSON.stringify(movies));
+        res.render('userpage', {id: id, movies: movies});
+    });
 });
+
+
+
 
 
 app.listen(3000, function() {
