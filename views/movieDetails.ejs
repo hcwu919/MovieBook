@@ -1,4 +1,14 @@
 <html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.js"></script>
+
+</head>
+
 <body>
 
 <div class="para">
@@ -28,8 +38,28 @@
         <% }) %>
     <% } %>
 
-    <p><a href="/movie/reviews/<%= id %>">See reviews</a></p>
-    <p><a href="/">back to home</a></p>
+
+
+        <div class="row">
+            <form action="/movie/<%= id %>/comment" method="post">
+                <div class="ui form left">
+                    <div class="field" style="width: 35%; padding-left: 1%">
+                        <label>Title</label>
+                        <input type="text" placeholder="First Name">
+                    </div>
+                    <div class="field" style="width: 35%; padding-left: 1%">
+                        <label>Your Review:</label>
+                        <textarea name="comment[content]" placeholder="content" type="text"></textarea>
+                    </div>
+                    <div class="form-group" style="padding-left: 1%">
+                        <button class="ui button primary" >Submit</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    
+    <p><a href="/">Back to home</a></p>
 
 </div>
 </body>

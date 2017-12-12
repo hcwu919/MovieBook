@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
 
 connection.connect();
-mongoose.createConnection("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
+mongoose.connect("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
 app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
@@ -70,7 +70,7 @@ app.get("/",function(req, res) {
             // if(err) throw err;
             console.log(data.toString());
             console.log(movies);
-            res.render('homepage', {movies: movies, isLogin: isLogin, username: username});
+            res.render('homepage', {movies: movies, isLogin: isLogin, username: username, userId: userId});
         });
 
     } else {
@@ -118,7 +118,7 @@ app.post('/result', function(req, res) {
     console.log(content);
     var query;
     if(type==="title") {
-        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE m.title LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -126,8 +126,11 @@ app.post('/result', function(req, res) {
             if (err) throw err;
             // console.log(JSON.stringify(movies[0]["IMDB"]));
             // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+
+
             res.render('result', {movies: movies});
         });
+
     }
     if(type==="actors") {
         query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
@@ -215,36 +218,43 @@ app.get('/movie/:id', function(req, res) {
             console.log(req.params.id);
             review.find({'imdbID':Number(req.params.id)}, function (err, result) {
                 if(err) throw err;
-                console.log(typeof reviews);
                 var reviews = JSON.stringify(result);
                 reviews = JSON.parse(reviews);
                 res.render('movieDetails',{id:req.params.id, reviews:reviews, movie: data});
             });
-            // res.render('movieDetails', {id: req.params.id, movie: data})
         }
     });
 });
 
-app.get('/movie/reviews/:id', function (req, res) {
-    console.log(req.params.id);
-    review.find({'imdbID':Number(req.params.id)},function (err, reviews) {
-        if(err) throw err;
-        console.log(reviews);
-        res.render('reviews',{id:req.params.id, reviews:reviews});
-        // res.render('reviews',{reviews:reviews});
-    });
-
-
-    // review.find({imdbID:req.params.id},function (err, reviewSet) {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         console.log("success");
-    //         console.log(reviewSet);
-    //         res.render("reviews",{review: reviewSet});
-    //     }
-    // });
+app.get("/movie/:id/comments/new", function (req, res) {
+    review.find({imdbID:req.params.id}, function (err, review) {
+        if(err) {
+            throw err;
+        } else {
+            var query = "SELECT m.title as moviename FROM Movie m WHERE m.imdbId="+Number(req.params.id);
+            connection.query(query, function (err, movie) {
+                if (err) {
+                    throw err;
+                } else {
+                    res.render("comment", {id:req.params.id, review: review, movie: movie});
+                }
+            })
+        }
+    })
 });
+
+app.post("/movie/:id/comment", function (req, res) {
+    review.find({imdbID: req.params.id}, function (err, movie) {
+        if (err) {
+            res.redirect("/movie/"+res.params.id);
+        } else {
+            movie[0]["review"] += ".," + req.body.comment["content"];
+            console.log(movie[0]);
+            movie[0].save();
+            res.redirect("/movie/"+req.params.id);
+        }
+    })
+})
 
 //==============================================================================
 
@@ -313,7 +323,7 @@ function isLoggedIn(res, req, next) {
 // ==================================== Rank List ============================================
 // imdb rank
 app.get('/imdb', function (req, res) {
-    query = "Select distinct m.imdbId as id, M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct M.imdbId as id, M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.IMDB Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -324,7 +334,7 @@ app.get('/imdb', function (req, res) {
 
 // metacritic rank
 app.get('/metacritic', function (req, res) {
-    query = "Select distinct m.imdbId as id, M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct M.imdbId as id, M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.Metacritic Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -335,7 +345,7 @@ app.get('/metacritic', function (req, res) {
 
 // rotten tomatoes rank
 app.get('/rotten_tomatoes', function (req, res) {
-    query = "Select distinct m.imdbId as id, M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    query = "Select distinct M.imdbId as id, M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.RottenTomatoes Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
@@ -346,7 +356,7 @@ app.get('/rotten_tomatoes', function (req, res) {
 
 // fadango rank
 app.get('/fandango', function (req, res) {
-    query = "Select distinct m.imdbId as id, M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
+    query = "Select distinct M.imdbId as id, M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));

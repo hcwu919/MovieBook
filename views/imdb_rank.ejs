@@ -102,7 +102,7 @@
             <!--Name(title), Year(title_year), Duration(duration), Genre(genres), Actors(actor_1_name, -->
             <!--actor_2_name, actor_3_name), Country(country), Ratings, IMDB(movie_imdb_link)-->
             <div class="para">
-                <p> <strong>Name: </strong> <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </p>
+                <p><a href="/movie/<%= movies[i]["id"] %>"><strong>Name: </strong> <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </a></p>
                 <p> <li> IMDB: <%= movies[i]["IMDB"] %>/10.0 </li> </p>
             </div>
         </div>
