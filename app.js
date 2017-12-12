@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
 
 connection.connect();
-mongoose.connect("mongodb://laoge:666@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
+mongoose.connect("mongodb://Yinchuan:123123123qq@ds129010.mlab.com:29010/movie_review", {useMongoClient: true});
 app.use(require("express-session")({
     secret : "moviebook is the best",
     resave : false,
@@ -118,7 +118,7 @@ app.post('/result', function(req, res) {
     console.log(content);
     var query;
     if(type==="title") {
-        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE m.title LIKE '%" + content + "%' group by m.title LIMIT 50";
@@ -126,8 +126,11 @@ app.post('/result', function(req, res) {
             if (err) throw err;
             // console.log(JSON.stringify(movies[0]["IMDB"]));
             // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
+
+
             res.render('result', {movies: movies});
         });
+
     }
     if(type==="actors") {
         query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
@@ -215,36 +218,43 @@ app.get('/movie/:id', function(req, res) {
             console.log(req.params.id);
             review.find({'imdbID':Number(req.params.id)}, function (err, result) {
                 if(err) throw err;
-                console.log(typeof reviews);
                 var reviews = JSON.stringify(result);
                 reviews = JSON.parse(reviews);
                 res.render('movieDetails',{id:req.params.id, reviews:reviews, movie: data});
             });
-            // res.render('movieDetails', {id: req.params.id, movie: data})
         }
     });
 });
 
-app.get('/movie/reviews/:id', function (req, res) {
-    console.log(req.params.id);
-    review.find({'imdbID':Number(req.params.id)},function (err, reviews) {
-        if(err) throw err;
-        console.log(reviews);
-        res.render('reviews',{id:req.params.id, reviews:reviews});
-        // res.render('reviews',{reviews:reviews});
-    });
-
-
-    // review.find({imdbID:req.params.id},function (err, reviewSet) {
-    //     if (err) {
-    //         throw err;
-    //     } else {
-    //         console.log("success");
-    //         console.log(reviewSet);
-    //         res.render("reviews",{review: reviewSet});
-    //     }
-    // });
+app.get("/movie/:id/comments/new", function (req, res) {
+    review.find({imdbID:req.params.id}, function (err, review) {
+        if(err) {
+            throw err;
+        } else {
+            var query = "SELECT m.title as moviename FROM Movie m WHERE m.imdbId="+Number(req.params.id);
+            connection.query(query, function (err, movie) {
+                if (err) {
+                    throw err;
+                } else {
+                    res.render("comment", {id:req.params.id, review: review, movie: movie});
+                }
+            })
+        }
+    })
 });
+
+app.post("/movie/:id/comment", function (req, res) {
+    review.find({imdbID: req.params.id}, function (err, movie) {
+        if (err) {
+            res.redirect("/movie/"+res.params.id);
+        } else {
+            movie[0]["review"] += ".," + req.body.comment["content"];
+            console.log(movie[0]);
+            movie[0].save();
+            res.redirect("/movie/"+req.params.id);
+        }
+    })
+})
 
 //==============================================================================
 
