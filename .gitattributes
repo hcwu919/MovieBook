@@ -1,2 +1,2 @@
 *.js linguist-language=JavaScript
-*.ejs linguist-language=HTML
+*.ejs linguist-language=JavaScript
