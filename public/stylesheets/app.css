@@ -1,4 +1,17 @@
+.ui.menu {
+    margin: 0px !important;
+}
 
+.override.ui.menu .item {
+    padding-top: 0.4em !important;
+    padding-bottom: 0.4em !important;
+    position: center;
+}
+
+.override.ui.inverted.dropdown {
+    min-width: 7em !important;
+    font-weight: 300;
+}
 
 #toprate .ui.grid.container{
     width: 5000px;
@@ -19,12 +32,19 @@
 }
 
 .ui.inverted.segment {
-    background-image: url("https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif"); /*https://semantic-ui.com/images/backgrounds/11.jpg*/
+    background-image: url("/images/xhr2.gif"); /*http://hdgifs.com/wp-content/uploads/2017/04/clapping.gif*/
+    /*https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif*/
     /*background-repeat: no-repeat;*/
-    background-size: 100% 100%;
+    /*background-size: 100% 100%;*/
+    background-size: cover;
     /*background-position: center center;*/
 }
 /*https://media.giphy.com/media/26FfjPAWlimUjAnNS/giphy.gif*/
+
+/*#1234.ui.inverted.segment {*/
+    /*background-image: url("http://hdgifs.com/wp-content/uploads/2017/04/clapping.gif");*/
+    /*background-size: cover;*/
+/*}*/
 
 .ui.inverted.vertical.footer.segment {
     background-image: url("");
@@ -48,8 +68,19 @@
     display: none;
 }
 
+
+#child.masthead.segment {
+    min-height: 480px;
+    padding: 1em 0em;
+    -moz-background-image: inherit;
+    -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
 .masthead.segment {
-    min-height: 580px;
+    min-height: 70%;
     padding: 1em 0em;
 }
 .masthead .logo.item img {

@@ -1,53 +1,139 @@
 <html>
-
 <head>
+
+    <title>MovieBook</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title> MovieBook </title>
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.js"></script>
 
+    <script>
+        $(document)
+            .ready(function() {
+                $('.ui.dropdown')
+                    .dropdown();
+
+                // fix menu when passed
+                $('.masthead')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function() {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function() {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                ;
+
+                // create sidebar and attach to menu open
+                $('.ui.sidebar')
+                    .sidebar('attach events', '.toc.item')
+                ;
+
+            })
+        ;
+    </script>
 </head>
 
 <body>
 
-<div class="para">
-    <img width="300" height="200"  src="<%= movie["Poster"] %>">
-    <p> <strong>Name: </strong> <%= movie["Title"] %> </p>
-    <p> <strong>Year: </strong> <%= movie["Year"] %> </p>
-    <p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>
-    <p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>
-    <p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>
-    <p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>
-    <p> <strong>Director: </strong> <%= movie["Director"] %> </p>
-    <p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>
-    <p> <strong>Country: </strong> <%= movie["Country"] %> </p>
-    <p> <strong>Language: </strong> <%= movie["Language"] %> </p>
-    <p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>
-    <p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>
 
-    <p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>
-    <p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p>
-    <strong>Reviews:</strong>
+<div class="ui fixed inverted menu" style="margin-bottom: 50%">
+    <div class="ui container">
+        <a href="/" class="header item">
+            <img class="logo" src="https://static1.squarespace.com/static/58e7ac565016e1384d799887/t/58e7acb9725e255284fd0dbf/1511366743027/?format=1500w">
+            MovieBook
+        </a>
+        <a href="/userpage/<%= userId%>" class="item">Homepage</a>
+        <a href="/search" class="item">Search</a>
+    </div>
 
-    <% if(reviews[0] === undefined) { %>
-        <p>No reviews currently</p>
-    <% } else { %>
-        <% reviews[0]["review"].split('.,').forEach(function (comment) { %>
-            <p> <%= comment.split("<br /><br />").join("\n"); %> <p>
-        <% }) %>
+
+    <% if(!isLogin){ %>
+    <div class="right menu">
+        <div class="item">
+            <a class="ui inverted grey button" href="/login">Log in</a>
+        </div>
+        <div class="item">
+            <a class="ui inverted grey button" href="/register">Sign up</a>
+        </div>
+    </div>
+    <% }else{ %>
+
+    <div class="right menu">
+        <div class="ui inline dropdown inverted item">
+            <a class="ui inverted button" >
+                My Profile
+                <i class="small dropdown icon" ></i>
+            </a>
+            <div class="menu">
+                <div class="item"><a style="color: inherit" href="/userpage/<%= userId %>">Homepage</a></div>
+                <div class="item">Likes</div>
+                <div class="item">Friends</div>
+            </div>
+        </div>
+        <!--<div class="item">-->
+        <!--<a class="ui inverted red button" href="/login">My Homepage</a>-->
+        <!--</div>-->
+        <div class="item">
+            <a class="ui inverted button" href="/logout">Sign Out</a>
+        </div>
+    </div>
     <% } %>
+</div>
 
 
 
+<div class="body" style="padding-top: 5%">
+    <div class="container" style="padding-left: 20%; padding-right: 20%">
+        <div class="ui two column grid">
+            <div class="ui ten wide column">
+                <h1 class="ui content"> <strong><%= movie["Title"] %></strong>  </h1>
+                <h4> <strong>Year: </strong> <%= movie["Year"] %> </h4>
+                <h4> <strong>Rated: </strong> <%= movie["Rated"] %> </h4>
+                <h4> <strong>Released Time: </strong> <%= movie["Released"] %> </h4>
+                <h4> <strong>Runtime: </strong> <%= movie["Runtime"] %> </h4>
+                <h4> <strong>Genre: </strong> <%= movie["Genre"] %> </h4>
+                <h4> <strong>Director: </strong> <%= movie["Director"] %> </h4>
+                <h4> <strong>Actors: </strong> <%= movie["Actors"] %> </h4>
+                <h4> <strong>Country: </strong> <%= movie["Country"] %> </h4>
+                <h4> <strong>Language: </strong> <%= movie["Language"] %> </h4>
+                <h4> <strong>Awards: </strong> <%= movie["Awards"] %> </h4>
+                <h4> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </h4>
+            </div>
+            <div class="ui five wide column" style="margin-top: 3%">
+                <div class="image" style="border: 8px grey; margin: 8px">
+                    <img width="300" height="330"  src="<%= movie["Poster"] %>">
+                </div>
+            </div>
+        </div>
+        <div class="content" style="margin-top: 30px">
+            <h3><strong>Reviews:</strong></h3>
+        </div>
+        <div class="content" style="margin-top: 30px">
+            <h5>
+                <% if(reviews[0] === undefined) { %>
+                <p>No reviews currently</p>
+                <% } else { %>
+                <% reviews[0]["review"].split('.,').forEach(function (comment) { %>
+                <p> <%= comment.split("<br /><br />").join("\n"); %> <p>
+                    <% }) %>
+                    <% } %>
+            </h5>
+        </div>
         <div class="row">
             <form action="/movie/<%= id %>/comment" method="post">
                 <div class="ui form left">
-                    <div class="field" style="width: 35%; padding-left: 1%">
-                        <label>Title</label>
-                        <input type="text" placeholder="First Name">
-                    </div>
-                    <div class="field" style="width: 35%; padding-left: 1%">
+                    <div class="field" style="width: 50%; padding-top: 3%">
                         <label>Your Review:</label>
                         <textarea name="comment[content]" placeholder="content" type="text"></textarea>
                     </div>
@@ -58,6 +144,58 @@
 
             </form>
         </div>
+    </div>
+</div>
+
+
+
+<div class="para">
+    <!--<img width="300" height="200"  src="<%= movie["Poster"] %>">-->
+    <!--<p> <strong>Name: </strong> <%= movie["Title"] %> </p>-->
+    <!--<p> <strong>Year: </strong> <%= movie["Year"] %> </p>-->
+    <!--<p> <strong>Rated: </strong> <%= movie["Rated"] %> </p>-->
+    <!--<p> <strong>Released Time: </strong> <%= movie["Released"] %> </p>-->
+    <!--<p> <strong>Runtime: </strong> <%= movie["Runtime"] %> </p>-->
+    <!--<p> <strong>Genre: </strong> <%= movie["Genre"] %> </p>-->
+    <!--<p> <strong>Director: </strong> <%= movie["Director"] %> </p>-->
+    <!--<p> <strong>Actors: </strong> <%= movie["Actors"] %> </p>-->
+    <!--<p> <strong>Country: </strong> <%= movie["Country"] %> </p>-->
+    <!--<p> <strong>Language: </strong> <%= movie["Language"] %> </p>-->
+    <!--<p> <strong>Awards: </strong> <%= movie["Awards"] %> </p>-->
+    <!--<p> <strong>imdbRating: </strong> <%= movie["imdbRating"] %> </p>-->
+
+    <!--<p> <strong>Plot Description: </strong> <%= movie["Plot"] %> </p>-->
+    <!--<p> <strong>IMDBiD: </strong> <%= movie["imdbID"] %> </p>-->
+    <!--<strong>Reviews:</strong>-->
+
+    <!--<% if(reviews[0] === undefined) { %>-->
+        <!--<p>No reviews currently</p>-->
+    <!--<% } else { %>-->
+        <!--<% reviews[0]["review"].split('.,').forEach(function (comment) { %>-->
+            <!--<p> <%= comment.split("<br /><br />").join("\n"); %> <p>-->
+        <!--<% }) %>-->
+    <!--<% } %>-->
+
+
+
+        <!--<div class="row">-->
+            <!--<form action="/movie/<%= id %>/comment" method="post">-->
+                <!--<div class="ui form left">-->
+                    <!--<div class="field" style="width: 35%; padding-left: 1%">-->
+                        <!--<label>Title</label>-->
+                        <!--<input type="text" placeholder="First Name">-->
+                    <!--</div>-->
+                    <!--<div class="field" style="width: 35%; padding-left: 1%">-->
+                        <!--<label>Your Review:</label>-->
+                        <!--<textarea name="comment[content]" placeholder="content" type="text"></textarea>-->
+                    <!--</div>-->
+                    <!--<div class="form-group" style="padding-left: 1%">-->
+                        <!--<button class="ui button primary" >Submit</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</form>-->
+        <!--</div>-->
 
     <p><a href="/">Back to home</a></p>
 

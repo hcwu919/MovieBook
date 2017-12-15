@@ -3,111 +3,233 @@
 <html>
 <head>
     <title>MovieBook</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><!-- load fontawesome -->
-    <link rel="stylesheet" href="../../stylesheets/bootstrap.css">
-    <link rel="stylesheet" href="../../stylesheets/style.css">
-    <style>
-        body { padding-top: 80px; }
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
 
-        .review > div {
-            display: inline-block;
-        }
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.js"></script>
 
-        .para {
-            text-align: left;
-            margin-left: 120px;
-        }
 
-        a > button {
-            margin-left: 20px;
-            margin-top: 20px;
-        }
-    </style>
 </head>
-<body>
-    <nav class="navbar navbar-default">
+<body style="padding-top: 0px">
 
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">MovieBook</a>
+
+
+<!--========================================================= head ========================================================-->
+<div id="mainpage" class="pusher">
+
+    <div id="child" class="ui inverted vertical masthead segment" style="background-image: url("../../images/resultbackground.jpeg")">
+        <div class="ui container">
+
+            <div class="ui large secondary inverted pointing menu">
+
+
+                <a class="toc item">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a class="active item" href="/">MovieBook</a>
+                <a class="item">Movies</a>
+                <div class="ui item inline dropdown">
+                    Genre
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item"><a style="color: inherit" href="/action">Action</a></div>
+                        <div class="item"><a style="color: inherit" href="/comedy">Comedy</a></div>
+                        <div class="item"><a style="color: inherit" href="/drama">Drama</a></div>
+                        <div class="item"><a style="color: inherit" href="/thriller">Thriller</a></div>
+                        <div class="item"><a style="color: inherit" href="/crime">Crime</a></div>
+                        <div class="item"><a style="color: inherit" href="/horror">Horror</a></div>
+                        <div class="item"><a style="color: inherit" href="/romance">Romance</a></div>
+                        <div class="item"><a style="color: inherit" href="/documentary">Documentary</a></div>
+                    </div>
+                </div>
+                <div class="ui item inline dropdown">
+                    Rank
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item"><a style="color: inherit" href="/rank">All</a></div>
+                        <div class="item"><a style="color: inherit" href="/imdb">IMDB</a></div>
+                        <div class="item"><a style="color: inherit" href="/metacritic">Metacritic</a></div>
+                        <div class="item"><a style="color: inherit" href="/rotten_tomatoes">Rotten Tomatoes</a></div>
+                        <div class="item"><a style="color: inherit" href="/fandango">Fandango</a></div>
+                    </div>
+                </div>
+
+
+
+
+                <%if(!isLogin){%>
+                <div class="right item">
+                    <a class="ui inverted button" href="/login">Log in</a>
+                    <a class="ui inverted button" href="/register">Sign up</a>
+                </div>
+                <%}else{%>
+                <div class="right item">
+                    <div class="ui inline dropdown inverted button">
+                        My Profile
+                        <i class="small dropdown icon" style="color: inherit"></i>
+                        <div class="menu">
+                            <div class="item"><a style="color: inherit" href="/userpage/<%= userId %>">Homepage</a></div>
+                            <div class="item">Likes</div>
+                            <div class="item">Friends</div>
+                        </div>
+                    </div>
+                    <a class="ui inverted button" href="/logout">Sign Out</a>
+                </div>
+                <% } %>
+
             </div>
+        </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/"> Movies <span class="sr-only">(current)</span></a></li>
-                    <li><a href="/artists"> Artists </a></li>
-                    <li><a href="/reviews"> Reviews </a></li>
-                    <li><a href="/action"> Genre </a></li>
-                    <li><a href="/rank"> Rank </a></li>
-                </ul>
-                <form action='/result' method="post" class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" size="30" placeholder="Search movies or people here" name="searchContent">
+        <div class="ui center aligned text container" >
+            <h1 class="ui inverted header" style="font-weight: bold; margin-bottom: 10%; margin-top: 10%">
+                <img src="https://static1.squarespace.com/static/58e7ac565016e1384d799887/t/58e7acb9725e255284fd0dbf/1511366743027/?format=1500w" style="background: transparent;">
+                MovieBook
+            </h1>
+        </div>
+
+
+    <div class="row" style="text-align: center; padding-left: 14.5%">
+        <div class="ui grid" style="position: absolute; bottom: 15px;">
+            <div class="center ui menu" style=" background-color: transparent;">
+                <form action='/result' method="post" class="ui item form" role="search">
+                    <div class="ui item">
+                        <input type="text" class="ui form"   style="width: 300px" placeholder="Database Search" name="searchContent">
                     </div>
-                    <select name="searchType" size="1">
+                    <select class="override inverted ui dropdown" name="searchType" style="width: 50px" >
                         <option value="title" selected> title </option>
                         <option value="actors"> actors </option>
                         <option value="country"> country </option>
                         <option value="year"> year </option>
                         <option value="genres"> genres </option>
                     </select>
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button class="ui inverted item button" type="submit">
+                        <i class="large search icon inverted"></i>
+                    </button>
                 </form>
-                <form action='/apisearch' method="post" class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" size="30" placeholder="Search movie details" name="searchContent">
+                <form action='/apisearch' method="post" class="ui item form" style="padding-left: 70px" role="search">
+                    <div class="ui item">
+                        <input type="text" class="ui form" style="width: 300px" placeholder="API Search" name="searchContent">
                     </div>
-                    <select name="searchType" size="1">
+                    <select class="override inverted ui dropdown" name="searchType" style="width: 50px">
                         <option value="title" selected> title </option>
-                        <option value="actors"> actors </option>
-                        <option value="country"> country </option>
-                        <option value="year"> year </option>
-                        <option value="genres"> genres </option>
+                        <option value="id"> id </option>
                     </select>
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button class="ui inverted item button" type="submit">
+                        <i class="large search icon inverted"></i>
+                    </button>
                 </form>
-
-
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-
-<!--==================================================================================================================-->
-
-<!-- Reviews: every div shows one review tuple -->
-<% for(var i = 0; i < movies.length; i++){ %>
-<div class="container">
-    <div class="well">
-
-        <div class="review">
-            <!--Name(title), Year(title_year), Duration(duration), Genre(genres), Actors(actor_1_name, -->
-            <!--actor_2_name, actor_3_name), Country(country), Ratings, IMDB(movie_imdb_link)-->
-
-            <div class="para">
-                <p> <strong><a href="/movie/<%= movies[i]["id"] %>">Name:  <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </a></strong></p>
-                <p> <strong>Year: </strong> <%= movies[i]["title_year"] %> </p>
-                <p> <strong>Duration: </strong> <%= movies[i]["duration"] %> min </p>
-                <p> <strong>Genre: </strong> <%= movies[i]["genres"] %> </p>
-                <p> <strong>Actors: </strong> <%= movies[i]["actor_1_name"].replace("?", "e") %>, <%= movies[i]["actor_2_name"].replace("?", "e") %>, <%= movies[i]["actor_3_name"].replace("?", "e") %> </p>
-                <p> <strong>Country: </strong> <%= movies[i]["country"] %> </p>
-                <p> <strong>Ratings: </strong> <%= movies[i][""] %> </p>
-                <p> <li> IMDB: <%= movies[i]["IMDB"] %>/10.0 </li> </p>
-                <p> <li> Metacritic: <%= movies[i]["Metacritic"] %>/100 </li> </p>
-                <p> <li> Rotten Tomatoes: <%= movies[i]["RottenTomatoes"] %>% </li> </p>
-                <p> <li> Fandango: <%= movies[i]["Fandango_Stars"] %>/5.0 </li> </p>
-                <p> <strong>IMDB Link: </strong>
-                    <<a href=<%= movies[i]["movie_imdb_link"] %> > click here to see more </a>>
-                </p>
             </div>
         </div>
     </div>
+    </div>
 </div>
-<% } %>
-<script src="../../js/bootstrap.min.js"></script>
-<script src="../../js/jquery.js"></script>
-<script src="../../js/bootstrap.js"></script>
+
+
+
+
+
+<!--==================================================================================================================-->
+
+
+
+<div class="ui grid center" style="padding-left: 16.5%; padding-right: 12%; margin-top: 50px">
+
+
+    <!-- Reviews: every div shows one review tuple -->
+    <% for(var i = 0; i < movies.length; i++){ %>
+    <div class="ui five wide column">
+        <div class="container">
+            <div class="ui card" style="height: 17em">
+                <div id="rate" class="content">
+                    <div class="header" style="text-align: center">
+                        <a href="/movie/<%=movies[i]["id"]%>"><%=movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %></a>
+                    </div>
+                    <div class="description" style="text-align: justify;">
+                        <li> <strong>Year: </strong> <%= movies[i]["title_year"] %> </li>
+                        <li> <strong>Duration: </strong> <%= movies[i]["duration"] %> min </li>
+                        <li> <strong>Genre: </strong> <%= movies[i]["genres"] %> </li>
+                        <p>
+                        <li> <strong>Actors:</strong>
+                            <%= movies[i]["actor_1_name"].replace("?", "e") %>, <%= movies[i]["actor_2_name"].replace("?", "e") %>, <%= movies[i]["actor_3_name"].replace("?", "e") %> </li>
+                        </p>
+                        <li> <strong>Country: </strong> <%= movies[i]["country"] %> </li>
+                    </div>
+                </div>
+                <div id="rate" class="ui two bottom attached buttons">
+                    <div class="ui button" >
+                        <i class="film icon"></i>
+                        <a href=<%= movies[i]["movie_imdb_link"] %>>IMDB</a>
+                    </div>
+                    <div class="ui primary button" >
+                        <i class="play icon"></i>
+                        <a href="/movie/<%=movies[i]["id"]%>" style="color: white">Detials</a>
+                    </div>
+                </div>
+
+                <div class="ui popup">
+                    <div class="header">Rate: <%= movies[i]["IMDB"] %> / 10.0 </div>
+                    <div class="ui star rating" data-rating="<%= Math.round(movies[i]["IMDB"]/10*5) %>"></div>
+                </div>
+            </div>
+
+
+            <!--<p> <strong><a href="/movie/<%= movies[i]["id"] %>">Name:  <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %> </a></strong></p>-->
+            <!--<p> <strong>Year: </strong> <%= movies[i]["title_year"] %> </p>-->
+            <!--<p> <strong>Duration: </strong> <%= movies[i]["duration"] %> min </p>-->
+            <!--<p> <strong>Genre: </strong> <%= movies[i]["genres"] %> </p>-->
+            <!--<p> <strong>Actors: </strong> <%= movies[i]["actor_1_name"].replace("?", "e") %>, <%= movies[i]["actor_2_name"].replace("?", "e") %>, <%= movies[i]["actor_3_name"].replace("?", "e") %> </p>-->
+            <!--<p> <strong>Country: </strong> <%= movies[i]["country"] %> </p>-->
+            <!--<p> <strong>Ratings: </strong> <%= movies[i][""] %> </p>-->
+            <!--<p> <li> IMDB: <%= movies[i]["IMDB"] %>/10.0 </li> </p>-->
+            <!--<p> <li> Metacritic: <%= movies[i]["Metacritic"] %>/100 </li> </p>-->
+            <!--<p> <li> Rotten Tomatoes: <%= movies[i]["RottenTomatoes"] %>% </li> </p>-->
+            <!--<p> <li> Fandango: <%= movies[i]["Fandango_Stars"] %>/5.0 </li> </p>-->
+            <!--<p> <strong>IMDB Link: </strong>-->
+                <!--<<a href=<%= movies[i]["movie_imdb_link"] %> > click here to see more </a>>-->
+            <!--</p>-->
+
+        </div>
+
+    </div>
+    <% } %>
+
+
+</div>
+
+
+    <script>
+        $('.activating.element')
+            .popup()
+        ;
+
+        $('#rate.content')
+            .popup({
+                inline: true
+            })
+        ;
+
+        $('#rate.image')
+            .popup({
+                inline: true
+            })
+        ;
+
+        $('#rate.ui.two.bottom.attached.buttons')
+            .popup({
+                inline: true
+            })
+        ;
+
+
+        $('.ui.rating')
+            .rating({
+                maxRating: 5
+            })
+        ;
+
+        $('.ui.dropdown')
+            .dropdown();
+    </script>
 </body>
 </html>

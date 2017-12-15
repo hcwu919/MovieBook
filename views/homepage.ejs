@@ -45,7 +45,7 @@
     </script>
 </head>
 
-<body>
+<body >
 
 <!-- Following Menu -->
 <div class="ui large top fixed hidden menu">
@@ -164,7 +164,7 @@
 
 
 <!-- Page Contents -->
-<div id="mainpage" class="pusher">
+<div id="mainpage" class="pusher" style="background-color: #E8EDED">
 
     <div class="ui inverted vertical masthead segment">
         <div class="ui container">
@@ -236,13 +236,13 @@
         </div>
 
         <div class="ui center aligned text container">
-            <h1 class="ui inverted header">
+            <h1 class="ui inverted header" style="font-weight: bold">
                 <img src="https://static1.squarespace.com/static/58e7ac565016e1384d799887/t/58e7acb9725e255284fd0dbf/1511366743027/?format=1500w">
                 MovieBook
             </h1>
-            <h2 id="welcome-message">Hi <%= username %>~</h2>
-            <a href="/#start" class="ui huge inverted basic button">Get Started <i class="right down arrow icon"></i></a>
-            <a href="/search" class="ui huge inverted basic button">Search Movie <i class="right search icon"></i></a>
+            <h2 id="welcome-message"><strong>Hi <%= username %>~</strong></h2>
+            <a href="/#start" class="ui huge  inverted button"><strong>Get Started</strong><i class="right down arrow icon"></i></a>
+            <a href="/search" class="ui huge inverted button"><strong>Search Movie</strong><i class="right search icon"></i></a>
         </div>
 
     </div>
@@ -286,13 +286,14 @@
 
                     <% }else{ %>
 
-                    <div id="rec-top" class="ui inverted segment">
+                    <div id="rec-top" class="ui inverted segment center" >
                         <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header grid" style="color: green"><i class="massive trophy icon" ></i>Guess You Like</h1>
+                            <h1 class="ui align-top header grid" style="color: green"><i class="massive trophy icon" ></i>Based On Your Likes</h1>
                         </div>
                         <p>
-                            <% for(var i = 1; i < 11; i += 2){ %>
-                        <h2 class="ui header" style="color: #011d37"><strong><%= (i+1)/2 %>. <%= movies[i].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
+                            <!--var i = 1; i < 11; i += 2-->
+                            <% for(var i = 0; i < 5; i ++){ %>
+                        <h2 class="ui header" style="color: #011d37"><strong><%= i+1 %>. <%= movies[i]["title"].replace(/[ÂÃ]/g, "").replace(/\?[\W]/g, "") %>
                             </strong></h2>
                         <div class="ui inverted divider"></div>
                         <% } %>
@@ -326,18 +327,7 @@
 
                     <% }else{ %>
 
-                    <div id="rec-top" class="ui inverted segment">
-                        <div class="align-top" style="padding-bottom: 10%">
-                            <h1 class="ui align-top header">Guess You Like</h1>
-                        </div>
-                        <p>
-                        <div>
-                            <h2>1. xxxxxxxxxx</h2>
-                            <h2>2. xxxxxxxxxx</h2>
-                            <h2>3. xxxxxxxxxx</h2>
-                        </div>
-                        </p>
-                    </div>
+
 
                     <% } %>
                 </div>
@@ -355,7 +345,7 @@
     <div class="ui container vertical stripe quote segment">
         <div  class="center aligned row">
             <h1 class="ui horizontal header divider">
-                <a href="#" style="color: #011d37;"><i class="bar chart icon"></i>Top Charts</a>
+                <a href="/rank" style="color: #011d37;"><i class="bar chart icon"></i>Top Charts</a>
             </h1>
         </div>
         <div class="ui equal width stackable internally celled grid">
@@ -390,19 +380,86 @@
         </div>
     </div>
 
-    <div class="ui vertical stripe segment">
-        <div class="ui text container">
-            <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
-            <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-            <a class="ui large button">Read More</a>
-            <h4 class="ui horizontal header divider">
-                <a href="#">Case Studies</a>
-            </h4>
-            <h3 class="ui header">Did We Tell You About Our Bananas?</h3>
-            <p>Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but its really true. It took years of gene splicing and combinatory DNA research, but our bananas can really dance.</p>
-            <a class="ui large button">I'm Still Quite Interested</a>
+
+
+    <div class="center aligned row" style="margin-bottom: 40px; margin-top: 3% ">
+        <h1 class="ui horizontal header divider">
+            <a href="#" style="color: #011d37;"><i class="bar chart icon"></i>Different Geners</a>
+        </h1>
+    </div>
+
+    <div class="row" style="width: 100%; padding-left: 17%; margin-bottom: 7%">
+        <div class="ui four column grid" style="">
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;  margin:10px; width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%; ">
+                    <img src="https://images.pexels.com/photos/267961/pexels-photo-267961.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb" alt="">
+                </div>
+                <div class=" content" style="text-align: center">
+                    <h5><a href="/action">ACTION</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://images.pexels.com/photos/164854/pexels-photo-164854.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb"
+                         alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/comedy">COMEDY</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://fastlearningschool.com/wp-content/uploads/acting.jpg" alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/drama">DRAMA</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://images.pexels.com/photos/673862/pexels-photo-673862.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb"
+                         alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="thriller">THRILLER</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://images.pexels.com/photos/64699/pexels-photo-64699.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb" alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/crime">CRIME</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://images.pexels.com/photos/534590/pexels-photo-534590.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb" alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/horror">HORROR</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img height="80%" src="https://images.pexels.com/photos/41068/pexels-photo-41068.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb" alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/romance">ROMANCE</a></h5>
+                </div>
+            </div>
+            <div class="ui segment card column" style="height: 240px;  padding-bottom: 0px;margin: 10px;  width: 20%; text-align: center; transition: all 0.25s ease-in; margin: 1 1px; display: block; color: black;  border: 1px solid #dae8e7; background-color: white;">
+                <div class="image" style="height: 80%">
+                    <img src="https://images.unsplash.com/photo-1506370612293-360919ece3d9?auto=format&fit=crop&w=1640&q=80&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" alt="">
+                </div>
+                <div class="content" style="text-align: center">
+                    <h5><a href="/documentary">DOCUMENTARY</a></h5>
+                </div>
+            </div>
         </div>
     </div>
+
+
 
 
     <div class="ui inverted vertical footer segment">
@@ -411,10 +468,10 @@
                 <div class="three wide column">
                     <h4 class="ui inverted header">About</h4>
                     <div class="ui inverted link list">
-                        <a href="#" class="item">Sitemap</a>
-                        <a href="#" class="item">Contact Us</a>
-                        <a href="#" class="item">Religious Ceremonies</a>
-                        <a href="#" class="item">Gazebo Plans</a>
+                        <a class="item" href="/thanks">Sitemap</a>
+                        <a class="item" href="/thanks">Contact Us</a>
+                        <a class="item" href="/thanks">Religious Ceremonies</a>
+                        <a class="item" href="/thanks">Gazebo Plans</a>
                     </div>
                 </div>
                 <div class="three wide column">

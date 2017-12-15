@@ -58,18 +58,40 @@ app.get("/",function(req, res) {
         }
         userId = sum % 600;
         userId = userId.toString();
-        console.log(userId);
-        var path = 'recom/recom.py';
 
-        var spawn = require("child_process").spawn;
-        var process = spawn('python',[path, userId]);
-
-        process.stdout.on('data', function (data){
-            var movies = data.toString().split('|');
-            // movies[0] = movies[0].substring(2, movies[0].length);
-            // if(err) throw err;
-            console.log(data.toString());
-            console.log(movies);
+        query = "SELECT DISTINCT t.imdbId, t.title\n" +
+            "FROM(\n" +
+            "(SELECT r.recom_imdbId AS imdbId, m.title AS title\n" +
+            "FROM Recommendation r inner join Movie m on r.recom_imdbId = m.imdbId\n" +
+            "WHERE r.like_imdbId = \n" +
+            "(SELECT ul.imdbId\n" +
+            "FROM User u INNER JOIN user_like ul ON u.userId = ul.User_ID\n" +
+            "WHERE u.userId = '" + userId + "'\n" +
+            "ORDER BY ul.rating DESC\n" +
+            "LIMIT 0, 1))\n" +
+            "UNION\n" +
+            "(SELECT r.recom_imdbId AS imdbId, m.title AS title\n" +
+            "FROM Recommendation r inner join Movie m on r.recom_imdbId = m.imdbId\n" +
+            "WHERE r.like_imdbId = \n" +
+            "(SELECT ul.imdbId\n" +
+            "FROM User u INNER JOIN user_like ul ON u.userId = ul.User_ID\n" +
+            "WHERE u.userId = '" + userId + "'\n" +
+            "ORDER BY ul.rating DESC\n" +
+            "LIMIT 1, 1))\n" +
+            "UNION\n" +
+            "(SELECT r.recom_imdbId AS imdbId, m.title AS title\n" +
+            "FROM Recommendation r inner join Movie m on r.recom_imdbId = m.imdbId\n" +
+            "WHERE r.like_imdbId = \n" +
+            "(SELECT ul.imdbId\n" +
+            "FROM User u INNER JOIN user_like ul ON u.userId = ul.User_ID\n" +
+            "WHERE u.userId = '" + userId + "'\n" +
+            "ORDER BY ul.rating DESC\n" +
+            "LIMIT 2, 1))) t\n" +
+            "ORDER BY RAND()\n" +
+            "LIMIT 5";
+        connection.query(query, function (err, movies) {
+            console.log(userId);
+            console.log(JSON.stringify(movies));
             res.render('homepage', {movies: movies, isLogin: isLogin, username: username, userId: userId});
         });
 
@@ -105,12 +127,43 @@ app.get("/",function(req, res) {
 
 // search page
 app.get('/search', function (req, res) {
-    res.render('search');
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+
+
+    res.render('search', {isLogin: isLogin, username: username, userId: userId});
 });
 
 
 // search result page
 app.post('/result', function(req, res) {
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
     var content = req.body.searchContent;
     // content = content.split("").join("''");
     var type = req.body.searchType;
@@ -118,20 +171,16 @@ app.post('/result', function(req, res) {
     console.log(content);
     var query;
     if(type==="title") {
-        query = "SELECT DISTINCT m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
             "Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId LEFT JOIN Movie_rate r ON m.imdbId = r.imdbId " +
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE m.title LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
             if (err) throw err;
-            // console.log(JSON.stringify(movies[0]["IMDB"]));
-            // if(!movies){ res.render('404', { isLogin: isLogin }); return; }
-
-
-            res.render('result', {movies: movies});
+            res.render('result', {movies: movies, isLogin: isLogin, username: username, userId: userId});
         });
-
     }
+
     if(type==="actors") {
         query = "SELECT DISTINCT m.imdbId as id, m.title, d.title_year, group_concat(g.genres Separator ', ') as genres, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
             "d.actor_3_name, d.movie_imdb_link, r.RottenTomatoes, r.Metacritic, r.IMDB, r.Fandango_Stars FROM " +
@@ -140,7 +189,7 @@ app.post('/result', function(req, res) {
             "LIKE '%" + content + "%' OR d.actor_3_name LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
             if (err) throw err;
-            res.render('result', {movies: movies});
+            res.render('result', {movies: movies,isLogin: isLogin, username: username, userId: userId});
         });
     }
     if(type==="country") {
@@ -150,7 +199,7 @@ app.post('/result', function(req, res) {
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.country LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
             if (err) throw err;
-            res.render('result', {movies: movies});
+            res.render('result', {movies: movies,isLogin: isLogin, username: username, userId: userId});
         });
     }
     if(type==="year") {
@@ -160,7 +209,7 @@ app.post('/result', function(req, res) {
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE d.title_year LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
             if (err) throw err;
-            res.render('result', {movies: movies});
+            res.render('result', {movies: movies,isLogin: isLogin, username: username, userId: userId});
         });
     }
     if(type==="genres") {
@@ -170,7 +219,7 @@ app.post('/result', function(req, res) {
             "INNER JOIN Genres g ON m.imdbId = g.imdbId WHERE g.genres LIKE '%" + content + "%' group by m.title LIMIT 50";
         connection.query(query, function (err, movies) {
             if (err) throw err;
-            res.render('result', {movies: movies});
+            res.render('result', {movies: movies,isLogin: isLogin, username: username, userId: userId});
         });
     }
 });
@@ -189,7 +238,7 @@ app.post("/apisearch", function (req, res) {
         } else {
             var data = JSON.parse(body);
             console.log(data);
-            res.render('apisearch', {movie:data})
+            res.render('apisearch', {movie:data, isLogin: isLogin, username: username, userId: userId})
         }
     });
 });
@@ -204,6 +253,22 @@ app.get("/movie", function(req, res) {
 
 // movie details
 app.get('/movie/:id', function(req, res) {
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+
+
     var mid = req.params.id;
     var pad = "0000000";
     mid = pad.substring(0, pad.length - mid.length) + mid;
@@ -220,7 +285,7 @@ app.get('/movie/:id', function(req, res) {
                 if(err) throw err;
                 var reviews = JSON.stringify(result);
                 reviews = JSON.parse(reviews);
-                res.render('movieDetails',{id:req.params.id, reviews:reviews, movie: data});
+                res.render('movieDetails',{id:req.params.id, reviews:reviews, movie: data,isLogin: isLogin, username: username, userId: userId});
             });
         }
     });
@@ -263,11 +328,6 @@ app.post("/movie/:id/comment", function (req, res) {
 
 
 // ============================== AUTH ROUT =====================================
-// app.get('/secret', function (req, res) {
-//     res.render("secret");
-// });
-
-
 // register page
 app.get('/register', function (req, res) {
     res.render("register");
@@ -310,12 +370,12 @@ app.get('/logout', function (req, res) {
     res.redirect("/");
 });
 
-function isLoggedIn(res, req, next) {
+function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
     var isLogin = req.isAuthenticated();
-    res.redirect("/login", {isLogin: isLogin});
+    res.redirect("login", {isLogin: isLogin});
 }
 
 // =======================================================================
@@ -323,55 +383,139 @@ function isLoggedIn(res, req, next) {
 // ==================================== Rank List ============================================
 // imdb rank
 app.get('/imdb', function (req, res) {
-    query = "Select distinct M.imdbId as id, M.title, MR.IMDB From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for (var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct M.imdbId as id, d.title_year, d.duration, d.duration, d.country, d.actor_1_name, " +
+        "d.actor_2_name, d.actor_3_name, d.movie_imdb_link, M.title, MR.IMDB From Movie_rate MR INNER JOIN movie_desc " +
+        "d ON MR.imdbId = d.imdbId Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.IMDB Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
-        res.render('imdb_rank', {movies: movies});
+        res.render('imdb_rank', {movies: movies, isLogin: isLogin, userId: userId, username: username});
     });
 });
 
 // metacritic rank
 app.get('/metacritic', function (req, res) {
-    query = "Select distinct M.imdbId as id, M.title, MR.Metacritic From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for (var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct M.imdbId as id, M.title, d.title_year, d.duration, d.duration, d.country, d.actor_1_name, " +
+        "d.actor_2_name, d.actor_3_name, d.movie_imdb_link, MR.Metacritic From Movie_rate MR INNER JOIN movie_desc d ON " +
+        "MR.imdbId = d.imdbId Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.Metacritic Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
-        res.render('metacritic_rank', {movies: movies});
+        res.render('metacritic_rank', {movies: movies, isLogin: isLogin, userId: userId, username: username});
     });
 });
 
 // rotten tomatoes rank
 app.get('/rotten_tomatoes', function (req, res) {
-    query = "Select distinct M.imdbId as id, M.title, MR.RottenTomatoes From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId " +
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for (var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct M.imdbId as id, M.title, d.title_year, d.duration, d.duration, d.country, d.actor_1_name, " +
+        "d.actor_2_name, d.actor_3_name, d.movie_imdb_link, MR.RottenTomatoes From Movie_rate MR INNER JOIN movie_desc " +
+        "d ON MR.imdbId = d.imdbId Inner Join Movie M on MR.imdbId = M.imdbId " +
         "Order by MR.RottenTomatoes Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
-        res.render('tomato_rank', {movies: movies});
+        res.render('tomato_rank', {movies: movies, isLogin: isLogin, userId: userId, username: username});
     });
 });
 
 // fadango rank
 app.get('/fandango', function (req, res) {
-    query = "Select distinct M.imdbId as id, M.title, MR.Fandango_Stars From Movie_rate MR Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for (var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct M.imdbId as id, M.title, d.title_year, d.duration, d.duration, d.country, d.actor_1_name, " +
+        "d.actor_2_name, d.actor_3_name, d.movie_imdb_link, MR.Fandango_Stars From Movie_rate MR INNER JOIN movie_desc " +
+        "d ON MR.imdbId = d.imdbId Inner Join Movie M on MR.imdbId = M.imdbId Order by MR.Fandango_Stars Desc Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
-        res.render('fandango_rank', {movies: movies});
+        res.render('fandango_rank', {movies: movies, isLogin: isLogin, userId: userId, username: username});
     });
 });
 
 // rank of all
 app.get('/rank', function (req, res) {
-    query = "Select distinct m.imdbId as id, m.title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
-        ")/4 AS avg_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 10";
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for (var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, m.title, d.title_year, d.duration, d.duration, d.country, d.actor_1_name, d.actor_2_name, " +
+        "d.actor_3_name, d.movie_imdb_link, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + mr.Fandango_Stars/0.5 " +
+        ")/4 AS avg_rate From Movie m INNER JOIN movie_desc d ON m.imdbId = d.imdbId Inner join  Movie_rate mr on m.imdbId=mr.imdbId Order by avg_rate DESC Limit 10";
     connection.query(query, function (err, movies) {
         if (err) throw err;
         console.log(JSON.stringify(movies));
-        res.render('ranklist', {movies: movies});
+        res.render('ranklist', {movies: movies, isLogin: isLogin, userId: userId, username: username});
     });
 });
 
@@ -380,82 +524,196 @@ app.get('/rank', function (req, res) {
 // ================== Genres ============================================
 
 app.get('/action', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country, " +
+        "d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Action' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Action' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/comedy', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, " +
+        "(mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Comedy' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Comedy' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/drama', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Drama' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId INNER JOIN movie_desc d  ON mr.imdbId = d.imdbId  Where g.genres = 'Drama' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/thriller', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Thriller' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Thriller' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/crime', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Crime' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Crime' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/horror', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Horror' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d  ON mr.imdbId = d.imdbId Where g.genres = 'Horror' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/romance', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Romance' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Romance' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
 app.get('/documentary', function(req, res) {
-    query = "Select distinct m.imdbId as id, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
+    var isLogin = false;
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+    }
+    query = "Select distinct m.imdbId as id, d.title_year as title_year, d.duration as duration, d.country,d.actor_1_name,d.actor_2_name, d.actor_3_name, d.movie_imdb_link, g.genres, m.title As Title, (mr.RottenTomatoes / 10 + mr.Metacritic /9.4 + mr.IMDB / 0.8 + " +
         "mr.Fandango_Stars/0.5 )/4 AS Avr_rate From Movie m Inner join  Movie_rate mr on m.imdbId=mr.imdbId INNER " +
-        "JOIN Genres g ON m.imdbId = g.imdbId Where g.genres = 'Documentary' Order by Avr_rate DESC LIMIT 5";
+        "JOIN Genres g ON m.imdbId = g.imdbId  INNER JOIN movie_desc d ON mr.imdbId = d.imdbId  Where g.genres = 'Documentary' Order by Avr_rate DESC LIMIT 5";
     connection.query(query, function (err, movies) {
         if (err) throw err;
-        res.render('genre', {movies: movies});
+        res.render('genre', {movies: movies,isLogin: isLogin, username: username, userId: userId});
     });
 });
 
@@ -463,26 +721,64 @@ app.get('/documentary', function(req, res) {
 
 //=============================== User Page ============================================
 app.get('/userpage/:userId', function(req, res) {
-    var id = req.params.userId;
-    console.log(id);
-    query = "SELECT DISTINCT u.userId\n" +
-        "FROM user_like ul JOIN User u ON ul.User_ID = u.userId\n" +
-        "WHERE ul.User_ID NOT IN (\n" +
-        "SELECT User_ID FROM user_like WHERE imdbId NOT IN \n" +
-        "(SELECT imdbId FROM user_like WHERE User_ID = '" + id + "') AND ul.User_ID != '" + id + "')\n";
-    connection.query(query, function (err, movies) {
-        if(err) throw err;
-        console.log(JSON.stringify(movies));
-        res.render('userpage', {id: id, movies: movies});
-    });
+    var isLogin = false;
+    console.log(JSON.stringify(req.user));
+    var user = req.user;
+    if (req.isAuthenticated()) {
+        isLogin = true;
+        user = JSON.stringify(user);
+        var username = JSON.parse(user)["username"];
+        var userId = JSON.parse(user)["_id"].toString();
+        var sum = 0;
+        for(var i = 0; i < userId.length; i++) {
+            sum += userId.charCodeAt(i);
+        }
+        userId = sum % 600;
+        userId = userId.toString();
+
+        var id = req.params.userId;
+        console.log(id);
+        query = "SELECT DISTINCT ul.User_ID FROM user_like ul WHERE ul.User_ID NOT IN (SELECT DISTINCT User_ID " +
+            "FROM user_like WHERE imdbId NOT IN (SELECT imdbId FROM user_like WHERE User_ID = '" + id + "')) AND ul.User_ID " +
+            "!= '" + id + "' GROUP BY ul.User_ID ORDER BY COUNT(ul.imdbId) DESC LIMIT 5";
+        connection.query(query, function (err, same_like) {
+            query = "Select User_ID2\n" +
+                "From Following\n" +
+                "Where User_ID = '" + id + "' and User_ID2 in (Select User_ID\n" +
+                "From Following\n" +
+                "Where User_ID2 = '" + id + "')";
+            connection.query(query, function (err, friend) {
+                query = "Select User_id2\n" +
+                    "From Following \n" +
+                    "Where User_id = '" + id + "'";
+                connection.query(query, function (err, follow) {
+                    query = "Select m.imdbId, m.title\n" +
+                        "From Movie m Inner join  user_like ul on m.imdbId=ul.imdbId \n" +
+                        "where User_ID = '" + id + "' and rating > 2.5";
+                    connection.query(query, function (err, movie_like) {
+                        query = "Select DISTINCT u.userName FROM User u WHERE u.userId = '" + id + "'";
+                        connection.query(query, function (err, name) {
+                            if(err) throw err;
+                            console.log(JSON.stringify(same_like));
+                            console.log(JSON.stringify(friend));
+                            console.log(JSON.stringify(follow));
+                            console.log(JSON.stringify(movie_like));
+                            console.log(JSON.stringify(name));
+                            res.render('userpage', {id: id, same_like: same_like, friend: friend, follow: follow, movie_like: movie_like, name: name, userId: userId});
+                        });
+                    });
+                });
+            });
+        });
+    }
 });
+//===========================================================================
 
-
+app.get('/thanks', function (req, res) {
+    res.render('thanks');
+});
 
 app.listen(3000, function() {
 	console.log("MovieBook Server Start!");
 });
 
-// server.listen(app.get('port'), function(){
-//     console.log('Express server listening on port ' + app.get('port'));
-// });
