@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Add new review</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.js"></script>
+
+</head>
+<body>
+<div class="ui container">
+    <div class="row">
+        <h1 style="text-align: center"> Add new review to <%= movie[0]["moviename"]%> </h1>
+        <div style="width: 30%; margin: 25px auto;">
+            <form action="/movie/<%= id %>/comment" method="post">
+                <div class="form-group">
+                    <input class="form-control" name="comment[title]" placeholder="title" type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="comment[content]" placeholder="content" type="text">
+                </div>
+                <div class="form-group">
+                    <button class="ui button primary">Submit</button>
+                </div>
+            </form>
+            <a href="/movie/<%= id %>">Back to <%= movie[0]["moviename"]%> page</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
